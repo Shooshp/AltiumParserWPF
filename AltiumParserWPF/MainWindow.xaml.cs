@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OpenMcdf;
 
 namespace AltiumParserWPF
 {
@@ -22,6 +24,10 @@ namespace AltiumParserWPF
         public MainWindow()
         {
             InitializeComponent();
+
+            var filename = @"F:\test\test.SchDoc";
+
+            var parser = new AltiumParser.AltiumParser(filename);
         }
     }
 }
