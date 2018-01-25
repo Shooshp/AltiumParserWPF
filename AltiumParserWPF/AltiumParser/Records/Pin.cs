@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -27,7 +28,9 @@ namespace AltiumParserWPF.AltiumParser.Records
         public int PinDesignator_PositionConglomerate;
         public int Designator_CustomFontId;
 
-        public Line PinLine;
+        public float Lenght;
+
+        public Dot PinStartDot;
 
         public Pin(string record)
         {
@@ -37,7 +40,45 @@ namespace AltiumParserWPF.AltiumParser.Records
             ExtractParameters();
             AllocateValues(this);
 
-            PinLine = new Line(Location_X, Location_X_Frac, Location_Y, Location_X_Frac);
+            var templenght = PinLength + "." + PinLength_Frac;
+            Lenght = float.Parse(templenght, CultureInfo.InvariantCulture.NumberFormat);
+
+            PinStartDot = new Dot(Location_X, Location_X_Frac, Location_Y, Location_Y_Frac);
+            Connection = GetEnd();
+        }
+
+        private Dot GetEnd()
+        {
+            var rotation = PinConglomerate & 0x3;
+            var tempx = PinStartDot.X;
+            var tempy = PinStartDot.Y;
+
+            switch (rotation)
+            {
+                case 0:
+                    // right
+                    tempx += Lenght;
+                break;
+
+                case 1: 
+                    // Up
+                    tempy += Lenght;
+                break;
+
+                case 2:
+                    //Left
+                    tempx -= Lenght;
+                break;
+
+                case 3:
+                    // Down
+                    tempy -= Lenght;
+                break;
+            }
+
+            var dot = new Dot(tempx, tempy);
+
+            return dot;
         }
     }
 }

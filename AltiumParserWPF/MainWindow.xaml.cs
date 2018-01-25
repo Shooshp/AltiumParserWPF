@@ -25,7 +25,7 @@ namespace AltiumParserWPF
         {
             InitializeComponent();
 
-            var filename = @"F:\test\test.SchDoc";
+            var filename = @"F:\SN74LVCH245ADBR_ETT_v2\SN74LVCH245ADBR_ETT_v2.SchDoc";
 
             var parser = new AltiumParser.AltiumParser(filename);
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using AltiumParserWPF.AltiumParser.Records;
 using OpenMcdf;
 
@@ -16,6 +17,12 @@ namespace AltiumParserWPF.AltiumParser
         public List<Designator> Designators;
         public List<Pin> Pins;
         public List<Wire> Wires;
+        public List<Net> Nets;
+        public List<Junction> Junctions;
+        public List<PowerPort> PowerPorts;
+        public List<Port> Ports;
+        public List<SheetSymbol> SheetSymbols;
+        public List<SheetEntry> SheetEntries;
 
         public AltiumParser(string filepath)
         {
@@ -39,8 +46,15 @@ namespace AltiumParserWPF.AltiumParser
             Designators = new List<Designator>();
             Pins = new List<Pin>();
             Wires = new List<Wire>();
+            Nets = new List<Net>();
+            Junctions = new List<Junction>();
+            PowerPorts = new List<PowerPort>();
+            Ports = new List<Port>();
+            SheetSymbols = new List<SheetSymbol>();
+            SheetEntries = new List<SheetEntry>();
 
             ParseRecords();
+            BuildComponents();
         }
 
         private void ParseRecords()
@@ -57,6 +71,10 @@ namespace AltiumParserWPF.AltiumParser
 
                     if (match.Success)
                     {
+                        if (counter == 2977)
+                        {
+                            Thread.Sleep(1);
+                        }
                         var type = Convert.ToInt32(match.Groups["Type"].Value);
 
                         switch (type)
@@ -133,22 +151,22 @@ namespace AltiumParserWPF.AltiumParser
 
                             case 15:
                                 Console.WriteLine(@"Found record type Sheet symbol " + counter);
-                                //TODO: Parse Sheet symbol
+                                SheetSymbols.Add(new SheetSymbol(record, counter));
                                 break;
 
                             case 16:
                                 Console.WriteLine(@"Found record type Sheet entry " + counter);
-                                //TODO: Parse Sheet entry
+                                SheetEntries.Add(new SheetEntry(record));
                                 break;
 
                             case 17:
                                 Console.WriteLine(@"Found record type Power port " + counter);
-                                //TODO: Parse Power port
+                                PowerPorts.Add(new PowerPort(record));
                                 break;
 
                             case 18:
                                 Console.WriteLine(@"Found record type Port " + counter);
-                                //TODO: Parse Port
+                                Ports.Add(new Port(record));
                                 break;
 
                             case 22:
@@ -158,7 +176,7 @@ namespace AltiumParserWPF.AltiumParser
 
                             case 25:
                                 Console.WriteLine(@"Found record type Net label " + counter);
-                                //TODO: Parse Net label
+                                Nets.Add(new Net(record));
                                 break;
 
                             case 26:
@@ -178,7 +196,7 @@ namespace AltiumParserWPF.AltiumParser
 
                             case 29:
                                 Console.WriteLine(@"Found record type Junction " + counter);
-                                //TODO: Parse Junction
+                                Junctions.Add(new Junction(record));
                                 break;
 
                             case 30:
@@ -236,6 +254,19 @@ namespace AltiumParserWPF.AltiumParser
                     }
                     counter++;
                 }
+            }
+        }
+
+        private void BuildComponents()
+        {
+            foreach (var component in Components)
+            {
+                component.CombineProperties(Pins, Designators);
+            }
+
+            foreach (var sheetSymbol in SheetSymbols)
+            {
+                sheetSymbol.CombineProperties(SheetEntries, Designators);
             }
         }
     }

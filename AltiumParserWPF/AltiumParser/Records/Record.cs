@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
@@ -13,6 +14,7 @@ namespace AltiumParserWPF.AltiumParser.Records
         public int Id;
         public string RecordString;
         public List<string> Parameters;
+        public Dot Connection;
 
         protected void AllocateValues(object child)
         {
@@ -36,11 +38,6 @@ namespace AltiumParserWPF.AltiumParser.Records
                         field.SetValue(child, converted);
                     }
                 }
-            }
-
-            foreach (var field in fields)
-            {
-              //  Console.WriteLine(field.Name.ToUpper() + " : " + field.GetValue(child));
             }
         }
 
@@ -66,12 +63,24 @@ namespace AltiumParserWPF.AltiumParser.Records
             {
                 if (symbol == '\0' ) 
                 {
-                    RecordString = new string(charArray.Take(counter).ToArray());
-                    break;
+                    var  temp = new string(charArray.Take(counter).ToArray());
+                    if (string.IsNullOrEmpty(temp))
+                    {
+                        temp = temp;
+                    }
+                    else
+                    {
+                        RecordString = temp;
+                        break;
+                    }
+                    
                 }
 
                 counter++;
             }
         }
+
+
+
     }
 }

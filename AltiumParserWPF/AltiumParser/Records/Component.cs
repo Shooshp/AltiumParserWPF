@@ -31,6 +31,9 @@ namespace AltiumParserWPF.AltiumParser.Records
         public string DesignItemId;
         public int AllPinCount;
 
+        public List<Pin> PinList;
+        public Designator Designator;
+
         public Component(string record, int id)
         {
             IsConnectable = false;
@@ -38,6 +41,27 @@ namespace AltiumParserWPF.AltiumParser.Records
             TrimRecord(record);
             ExtractParameters();
             AllocateValues(this);
+        }
+
+        public void CombineProperties(List<Pin> pins, List<Designator> designators)
+        {
+            PinList = new List<Pin>();
+
+            foreach (var pin in pins)
+            {
+                if (pin.OwnerIndex == Id)
+                {
+                    PinList.Add(pin);
+                }
+            }
+
+            foreach (var designator in designators)
+            {
+                if (designator.OwnerIndex == Id)
+                {
+                    Designator = designator;
+                }
+            }
         }
     }
 }

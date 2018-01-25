@@ -13,7 +13,7 @@ namespace AltiumParserWPF.AltiumParser.Records
         public string UniqueId;
         public int LocationCount;
 
-        public List<Line> WireLineList;
+        public List<Dot> WireDotList;
 
         public Wire(string record)
         {
@@ -23,11 +23,11 @@ namespace AltiumParserWPF.AltiumParser.Records
             ExtractParameters();
             AllocateValues(this);
 
-            WireLineList = new List<Line>();
-            AddLines();
+            WireDotList = new List<Dot>();
+            AddDots();
         }
 
-        private void AddLines()
+        private void AddDots()
         {
             if (LocationCount != 0)
             {
@@ -39,9 +39,9 @@ namespace AltiumParserWPF.AltiumParser.Records
                     var searchyfrac = new StringBuilder("Y" + i + "_FRAC").ToString();
 
                     var tempx = -1;
-                    var tempxfrac = -1;
+                    var tempxfrac = 0;
                     var tempy = -1;
-                    var tempyfrac = -1;
+                    var tempyfrac = 0;
 
                     foreach (var parameter in Parameters)
                     {
@@ -67,9 +67,9 @@ namespace AltiumParserWPF.AltiumParser.Records
                         }
                     }
 
-                    if (tempx != -1 && tempxfrac != -1 && tempy != -1 && tempyfrac != -1) 
+                    if (tempx != -1 && tempy != -1) 
                     {
-                        WireLineList.Add(new Line(tempx, tempxfrac, tempy, tempyfrac));
+                        WireDotList.Add(new Dot(tempx, tempxfrac, tempy, tempyfrac));
                     }
                 }
             }

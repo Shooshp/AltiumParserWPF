@@ -62,9 +62,15 @@
     <Compile Include="AltiumParser\AltiumParser.cs" />
     <Compile Include="AltiumParser\Records\Component.cs" />
     <Compile Include="AltiumParser\Records\Designator.cs" />
-    <Compile Include="AltiumParser\Records\Line.cs" />
+    <Compile Include="AltiumParser\Records\Dot.cs" />
+    <Compile Include="AltiumParser\Records\Junction.cs" />
+    <Compile Include="AltiumParser\Records\Net.cs" />
     <Compile Include="AltiumParser\Records\Pin.cs" />
+    <Compile Include="AltiumParser\Records\Port.cs" />
+    <Compile Include="AltiumParser\Records\PowerPort.cs" />
     <Compile Include="AltiumParser\Records\Record.cs" />
+    <Compile Include="AltiumParser\Records\SheetEntry.cs" />
+    <Compile Include="AltiumParser\Records\SheetSymbol.cs" />
     <Compile Include="AltiumParser\Records\Wire.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
