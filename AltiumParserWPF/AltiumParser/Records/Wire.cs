@@ -45,25 +45,28 @@ namespace AltiumParserWPF.AltiumParser.Records
 
                     foreach (var parameter in Parameters)
                     {
-                        var temp = parameter.Split(new string[] { "=" }, StringSplitOptions.None);
-                        var name = temp[0];
-                        var value = temp[1];
+                        if (parameter.Contains("="))
+                        {
+                            var temp = parameter.Split(new string[] { "=" }, StringSplitOptions.None);
+                            var name = temp[0];
+                            var value = temp[1];
 
-                        if (name == searchx)
-                        {
-                            tempx = Convert.ToInt32(value);
-                        }
-                        if (name == searchxfrac)
-                        {
-                            tempxfrac = Convert.ToInt32(value);
-                        }
-                        if (name == searchy)
-                        {
-                            tempy = Convert.ToInt32(value);
-                        }
-                        if (name == searchyfrac)
-                        {
-                            tempyfrac = Convert.ToInt32(value);
+                            if (name == searchx)
+                            {
+                                tempx = Convert.ToInt32(value);
+                            }
+                            if (name == searchxfrac)
+                            {
+                                tempxfrac = Convert.ToInt32(value);
+                            }
+                            if (name == searchy)
+                            {
+                                tempy = Convert.ToInt32(value);
+                            }
+                            if (name == searchyfrac)
+                            {
+                                tempyfrac = Convert.ToInt32(value);
+                            }
                         }
                     }
 

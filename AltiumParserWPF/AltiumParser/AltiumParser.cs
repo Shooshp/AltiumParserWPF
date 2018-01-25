@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -23,6 +24,8 @@ namespace AltiumParserWPF.AltiumParser
         public List<Port> Ports;
         public List<SheetSymbol> SheetSymbols;
         public List<SheetEntry> SheetEntries;
+        public List<SheetProperties> SheetsProperties;
+        public List<Parameter> Parameters;
 
         public AltiumParser(string filepath)
         {
@@ -34,7 +37,9 @@ namespace AltiumParserWPF.AltiumParser
             var stream = file.RootStorage.GetStream("FileHeader");
             var header = Encoding.Default.GetString(stream.GetData());
 
-            Records = header.Split(new string[] { "REC" }, StringSplitOptions.None);
+            file.Close();
+
+            Records = header.Split(new string[] { "RECORD=" }, StringSplitOptions.None);
 
             var match = recordCountPattern.Match(Records[0]);
             if (match.Success)
@@ -52,6 +57,9 @@ namespace AltiumParserWPF.AltiumParser
             Ports = new List<Port>();
             SheetSymbols = new List<SheetSymbol>();
             SheetEntries = new List<SheetEntry>();
+            SheetsProperties = new List<SheetProperties>();
+            Parameters = new List<Parameter>();
+
 
             ParseRecords();
             BuildComponents();
@@ -59,7 +67,7 @@ namespace AltiumParserWPF.AltiumParser
 
         private void ParseRecords()
         {
-            var recordTypePattern = new Regex(@"(ORD=(?<Type>\d+)?)");
+            var recordTypePattern = new Regex(@"(?<Type>\d+)\|");
 
             if (RecordCount != 0)
             {
@@ -71,10 +79,7 @@ namespace AltiumParserWPF.AltiumParser
 
                     if (match.Success)
                     {
-                        if (counter == 2977)
-                        {
-                            Thread.Sleep(1);
-                        }
+
                         var type = Convert.ToInt32(match.Groups["Type"].Value);
 
                         switch (type)
@@ -211,7 +216,7 @@ namespace AltiumParserWPF.AltiumParser
 
                             case 32:
                                 Console.WriteLine(@"Found record type Sheet name and file name " + counter);
-                                //TODO: Parse Sheet name and file name
+                                SheetsProperties.Add(new SheetProperties(record));
                                 break;
 
                             case 34:
@@ -232,7 +237,7 @@ namespace AltiumParserWPF.AltiumParser
 
                             case 41:
                                 Console.WriteLine(@"Found record type Parameter " + counter);
-                                //TODO: Parse Parameter
+                                Parameters.Add(new Parameter(record));
                                 break;
 
                             case 43:
@@ -261,12 +266,12 @@ namespace AltiumParserWPF.AltiumParser
         {
             foreach (var component in Components)
             {
-                component.CombineProperties(Pins, Designators);
+                component.CombineProperties(Pins, Designators, Parameters);
             }
 
             foreach (var sheetSymbol in SheetSymbols)
             {
-                sheetSymbol.CombineProperties(SheetEntries, Designators);
+                sheetSymbol.CombineProperties(SheetEntries, SheetsProperties, Parameters);
             }
         }
     }

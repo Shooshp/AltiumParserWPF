@@ -65,11 +65,13 @@
     <Compile Include="AltiumParser\Records\Dot.cs" />
     <Compile Include="AltiumParser\Records\Junction.cs" />
     <Compile Include="AltiumParser\Records\Net.cs" />
+    <Compile Include="AltiumParser\Records\Parameter.cs" />
     <Compile Include="AltiumParser\Records\Pin.cs" />
     <Compile Include="AltiumParser\Records\Port.cs" />
     <Compile Include="AltiumParser\Records\PowerPort.cs" />
     <Compile Include="AltiumParser\Records\Record.cs" />
     <Compile Include="AltiumParser\Records\SheetEntry.cs" />
+    <Compile Include="AltiumParser\Records\SheetProperties.cs" />
     <Compile Include="AltiumParser\Records\SheetSymbol.cs" />
     <Compile Include="AltiumParser\Records\Wire.cs" />
     <Compile Include="App.xaml.cs">

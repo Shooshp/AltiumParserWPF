@@ -23,8 +23,9 @@ namespace AltiumParserWPF.AltiumParser.Records
         public string UniqueId;
         public string SymbolType;
 
-        public Designator Designator;
+        public SheetProperties SheetProperties;
         public List<SheetEntry> SheetEntriesList;
+        public List<Parameter> AdditionalParameters;
 
         public SheetSymbol(string record, int id)
         {
@@ -36,9 +37,10 @@ namespace AltiumParserWPF.AltiumParser.Records
             AllocateValues(this);
         }
 
-        public void CombineProperties(List<SheetEntry> sheetEntries, List<Designator> designators)
+        public void CombineProperties(List<SheetEntry> sheetEntries, List<SheetProperties> sheetPropertieses, List<Parameter> parameters)
         {
             SheetEntriesList = new List<SheetEntry>();
+            AdditionalParameters = new List<Parameter>();
 
             foreach (var sheetEntry in sheetEntries)
             {
@@ -48,11 +50,19 @@ namespace AltiumParserWPF.AltiumParser.Records
                 }
             }
 
-            foreach (var designator in designators)
+            foreach (var sheetProperty in sheetPropertieses)
             {
-                if (designator.OwnerIndex == Id)
+                if (sheetProperty.OwnerIndex == Id)
                 {
-                    Designator = designator;
+                    SheetProperties = sheetProperty;
+                }
+            }
+
+            foreach (var parameter in parameters)
+            {
+                if (parameter.OwnerIndex == Id)
+                {
+                    AdditionalParameters.Add(parameter);
                 }
             }
         }

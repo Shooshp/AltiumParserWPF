@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
+    [DebuggerDisplay("Pin Name:{Name}, Designator:{Designator} Origin: X {PinStartDot.X} Y {PinStartDot.Y} End: X {Connection.X} Y {Connection.Y}")]
     public class Pin : Record
     {
         public int OwnerIndex;

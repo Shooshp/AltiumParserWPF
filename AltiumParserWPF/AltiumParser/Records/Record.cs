@@ -24,18 +24,21 @@ namespace AltiumParserWPF.AltiumParser.Records
 
             foreach (var parameter in Parameters)
             {
-                var temp = parameter.Split(new string[] { "=" }, StringSplitOptions.None);
-                var name = temp[0].Replace('.', '_');
-                var value = temp[1];
-
-                foreach (var field in fields)
+                if (parameter.Contains("="))
                 {
-                    var fieldname = field.Name.ToUpper();
+                    var temp = parameter.Split(new string[] { "=" }, StringSplitOptions.None);
+                    var name = temp[0].Replace('.', '_');
+                    var value = temp[1];
 
-                    if (fieldname == name)
+                    foreach (var field in fields)
                     {
-                        var converted = Convert.ChangeType(value, field.FieldType);
-                        field.SetValue(child, converted);
+                        var fieldname = field.Name.ToUpper();
+
+                        if (fieldname == name)
+                        {
+                            var converted = Convert.ChangeType(value, field.FieldType);
+                            field.SetValue(child, converted);
+                        }
                     }
                 }
             }

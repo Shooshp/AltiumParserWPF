@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
+    [DebuggerDisplay("Name:{Libreference}, Part:{CurrentPartId},  {Designator.Text} ")]
     public class Component : Record
     {
         public string Libreference;
@@ -32,6 +34,7 @@ namespace AltiumParserWPF.AltiumParser.Records
         public int AllPinCount;
 
         public List<Pin> PinList;
+        public List<Parameter> AdditionalParameters;
         public Designator Designator;
 
         public Component(string record, int id)
@@ -41,25 +44,38 @@ namespace AltiumParserWPF.AltiumParser.Records
             TrimRecord(record);
             ExtractParameters();
             AllocateValues(this);
+
+            Connection = new Dot(Location_X, Location_X_Frac, Location_Y, Location_Y_Frac);
         }
 
-        public void CombineProperties(List<Pin> pins, List<Designator> designators)
+        public void CombineProperties(List<Pin> pins, List<Designator> designators, List<Parameter> parameters)
         {
             PinList = new List<Pin>();
+            AdditionalParameters = new List<Parameter>();
+
 
             foreach (var pin in pins)
             {
-                if (pin.OwnerIndex == Id)
+                if (pin.OwnerIndex == Id && pin.OwnerpartId == CurrentPartId)
                 {
                     PinList.Add(pin);
                 }
             }
+     
 
             foreach (var designator in designators)
             {
                 if (designator.OwnerIndex == Id)
                 {
                     Designator = designator;
+                }
+            }
+
+            foreach (var parameter in parameters)
+            {
+                if (parameter.OwnerIndex == Id)
+                {
+                    AdditionalParameters.Add(parameter);
                 }
             }
         }
