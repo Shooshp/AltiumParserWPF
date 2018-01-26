@@ -22,7 +22,7 @@ namespace AltiumParserWPF.AltiumParser.Records
         public int Location_Y;
         public int Location_Y_Frac;
         public string Name;
-        public int Designator;
+        public string Designator;
         public int PinName_PositionConglomerate;
         public int Name_CustomPosition_Margin;
         public int Name_CustomPosition_Margin_Frac;

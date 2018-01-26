@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
@@ -9,6 +6,7 @@ namespace AltiumParserWPF.AltiumParser.Records
     {
         public int OwnerIndex;
         public int OwnerpartId;
+        public int Side;
         public int DistanceFromTop;
         public int DistanceFromTop_Frac1;
         public int Color;
@@ -18,6 +16,7 @@ namespace AltiumParserWPF.AltiumParser.Records
         public string Name;
         public int Style;
         public string ArrowKind;
+        public float CombinedDistanceFromTop;
 
         public SheetEntry(string record)
         {
@@ -26,6 +25,10 @@ namespace AltiumParserWPF.AltiumParser.Records
             TrimRecord(record);
             ExtractParameters();
             AllocateValues(this);
+
+            var temp = DistanceFromTop + "." + DistanceFromTop_Frac1;
+
+            CombinedDistanceFromTop = float.Parse(temp, CultureInfo.InvariantCulture.NumberFormat)*10;
         }
     }
 }

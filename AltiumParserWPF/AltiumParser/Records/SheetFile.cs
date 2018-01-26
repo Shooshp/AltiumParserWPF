@@ -1,24 +1,27 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
-    [DebuggerDisplay("Net Name:{Text}, X {Connection.X} Y {Connection.Y}")]
-    public class Net : Record
+    public class SheetFile : Record
     {
+        public int OwnerIndex;
         public int IndexInSheet;
         public int OwnerpartId;
         public int Location_X;
         public int Location_X_Frac;
         public int Location_Y;
         public int Location_Y_Frac;
-        public int Color;
         public int FontId;
         public string Text;
-        public string UniqueId;
 
-        public Net(string record)
+        public SheetFile(string record)
         {
-            IsConnectable = true;
+            IsConnectable = false;
+
+            IsConnectable = false;
 
             TrimRecord(record);
             ExtractParameters();

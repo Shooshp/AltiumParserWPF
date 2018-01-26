@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using AltiumParserWPF.AltiumParser.Records;
 using OpenMcdf;
 
@@ -24,7 +22,8 @@ namespace AltiumParserWPF.AltiumParser
         public List<Port> Ports;
         public List<SheetSymbol> SheetSymbols;
         public List<SheetEntry> SheetEntries;
-        public List<SheetProperties> SheetsProperties;
+        public List<SheetName> SheetsNames;
+        public List<SheetFile> SheetFiles;
         public List<Parameter> Parameters;
 
         public AltiumParser(string filepath)
@@ -34,12 +33,18 @@ namespace AltiumParserWPF.AltiumParser
             var recordCountPattern = new Regex(@"(WEIGHT=(?<Weight>\d+)?)");
             
             var file = new CompoundFile(FilePath);
-            var stream = file.RootStorage.GetStream("FileHeader");
-            var header = Encoding.Default.GetString(stream.GetData());
+
+            var mainStream = file.RootStorage.GetStream("FileHeader");
+            var storageStream = file.RootStorage.GetStream("Storage");
+            var additionalStream = file.RootStorage.GetStream("Additional");
+
+            var fileHeader = Encoding.Default.GetString(mainStream.GetData());
+            var additional = Encoding.Default.GetString(additionalStream.GetData());
+            var storage = Encoding.Default.GetString(storageStream.GetData());
 
             file.Close();
 
-            Records = header.Split(new string[] { "RECORD=" }, StringSplitOptions.None);
+            Records = fileHeader.Split(new[] { "RECORD=" }, StringSplitOptions.None);
 
             var match = recordCountPattern.Match(Records[0]);
             if (match.Success)
@@ -57,7 +62,8 @@ namespace AltiumParserWPF.AltiumParser
             Ports = new List<Port>();
             SheetSymbols = new List<SheetSymbol>();
             SheetEntries = new List<SheetEntry>();
-            SheetsProperties = new List<SheetProperties>();
+            SheetsNames = new List<SheetName>();
+            SheetFiles = new List<SheetFile>();
             Parameters = new List<Parameter>();
 
 
@@ -215,8 +221,13 @@ namespace AltiumParserWPF.AltiumParser
                                 break;
 
                             case 32:
-                                Console.WriteLine(@"Found record type Sheet name and file name " + counter);
-                                SheetsProperties.Add(new SheetProperties(record));
+                                Console.WriteLine(@"Found record type Sheet name" + counter);
+                                SheetsNames.Add(new SheetName(record));
+                                break;
+
+                            case 33:
+                                Console.WriteLine(@"Found record type Sheet file name " + counter);
+                                SheetFiles.Add(new SheetFile(record));
                                 break;
 
                             case 34:
@@ -271,7 +282,13 @@ namespace AltiumParserWPF.AltiumParser
 
             foreach (var sheetSymbol in SheetSymbols)
             {
-                sheetSymbol.CombineProperties(SheetEntries, SheetsProperties, Parameters);
+                sheetSymbol.CombineProperties(SheetEntries, SheetsNames, SheetFiles, Parameters);
+            }
+
+            foreach (var entry in SheetEntries)
+            {
+                entry.ChekWires(this);
+                entry.CheckNets(this);
             }
         }
     }

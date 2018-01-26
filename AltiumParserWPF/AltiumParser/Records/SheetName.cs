@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace AltiumParserWPF.AltiumParser.Records
+﻿namespace AltiumParserWPF.AltiumParser.Records
 {
-    public class SheetProperties : Record
+    public class SheetName : Record
     {
         public int OwnerIndex;
         public int IndexInSheet;
@@ -17,7 +12,7 @@ namespace AltiumParserWPF.AltiumParser.Records
         public int FontId;
         public string Text;
 
-        public SheetProperties(string record)
+        public SheetName(string record)
         {
             IsConnectable = false;
 

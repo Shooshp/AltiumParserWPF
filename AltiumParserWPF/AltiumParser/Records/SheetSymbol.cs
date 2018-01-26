@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Globalization;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
@@ -23,9 +21,13 @@ namespace AltiumParserWPF.AltiumParser.Records
         public string UniqueId;
         public string SymbolType;
 
-        public SheetProperties SheetProperties;
+        public SheetName SheetName;
+        public SheetFile SheetFile;
         public List<SheetEntry> SheetEntriesList;
         public List<Parameter> AdditionalParameters;
+        public Dot TopLeftConer;
+        public Dot TopRightConer;
+        public float XOffset;
 
         public SheetSymbol(string record, int id)
         {
@@ -35,9 +37,16 @@ namespace AltiumParserWPF.AltiumParser.Records
             TrimRecord(record);
             ExtractParameters();
             AllocateValues(this);
+
+            var temp = XSize + "." + XSize_Frac;
+
+            XOffset = float.Parse(temp, CultureInfo.InvariantCulture.NumberFormat);
+            TopLeftConer = new Dot(Location_X, Location_X_Frac, Location_Y, Location_Y_Frac);
+
+            TopRightConer = new Dot(TopLeftConer.X + XOffset, TopLeftConer.Y);
         }
 
-        public void CombineProperties(List<SheetEntry> sheetEntries, List<SheetProperties> sheetPropertieses, List<Parameter> parameters)
+        public void CombineProperties(List<SheetEntry> sheetEntries, List<SheetName> sheetNames, List<SheetFile> sheetsFiles, List<Parameter> parameters)
         {
             SheetEntriesList = new List<SheetEntry>();
             AdditionalParameters = new List<Parameter>();
@@ -50,11 +59,11 @@ namespace AltiumParserWPF.AltiumParser.Records
                 }
             }
 
-            foreach (var sheetProperty in sheetPropertieses)
+            foreach (var sheetName in sheetNames)
             {
-                if (sheetProperty.OwnerIndex == Id)
+                if (sheetName.OwnerIndex == Id)
                 {
-                    SheetProperties = sheetProperty;
+                    SheetName = sheetName;
                 }
             }
 
@@ -63,6 +72,26 @@ namespace AltiumParserWPF.AltiumParser.Records
                 if (parameter.OwnerIndex == Id)
                 {
                     AdditionalParameters.Add(parameter);
+                }
+            }
+
+            foreach (var sheetFile in sheetsFiles)
+            {
+                if (sheetFile.OwnerIndex == Id)
+                {
+                    SheetFile = sheetFile;
+                }
+            }
+
+            foreach (var sheetEntry in SheetEntriesList)
+            {
+                if (sheetEntry.Side == 0)
+                {
+                    sheetEntry.Connection = new Dot(TopLeftConer.X, TopLeftConer.Y - sheetEntry.CombinedDistanceFromTop);
+                }
+                else
+                {
+                    sheetEntry.Connection = new Dot(TopRightConer.X, TopRightConer.Y - sheetEntry.CombinedDistanceFromTop);
                 }
             }
         }

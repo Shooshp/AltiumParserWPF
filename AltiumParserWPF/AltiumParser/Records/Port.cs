@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace AltiumParserWPF.AltiumParser.Records
+﻿namespace AltiumParserWPF.AltiumParser.Records
 {
     public class Port : Record
     {

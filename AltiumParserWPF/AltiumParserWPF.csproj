@@ -71,7 +71,8 @@
     <Compile Include="AltiumParser\Records\PowerPort.cs" />
     <Compile Include="AltiumParser\Records\Record.cs" />
     <Compile Include="AltiumParser\Records\SheetEntry.cs" />
-    <Compile Include="AltiumParser\Records\SheetProperties.cs" />
+    <Compile Include="AltiumParser\Records\SheetFile.cs" />
+    <Compile Include="AltiumParser\Records\SheetName.cs" />
     <Compile Include="AltiumParser\Records\SheetSymbol.cs" />
     <Compile Include="AltiumParser\Records\Wire.cs" />
     <Compile Include="App.xaml.cs">

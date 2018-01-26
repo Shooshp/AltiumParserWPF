@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using System.Windows.Media;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
@@ -76,6 +78,30 @@ namespace AltiumParserWPF.AltiumParser.Records
                     }
                 }
             }
+        }
+
+        public bool ContainsDot(Dot dot)
+        {
+            var ChekDot = new Point(dot.X, dot.Y);
+
+            for (int i = 0; i < WireDotList.Count - 1; i++)
+            {
+                var A = WireDotList.ElementAt(i);
+                var B = WireDotList.ElementAt(i + 1);
+
+                
+                var start = new Point(A.X, A.Y);
+                var end = new Point(B.X, B.Y);
+
+                var line = new LineGeometry(start, end);
+
+                if (line.FillContains(ChekDot, 0.2, ToleranceType.Relative))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

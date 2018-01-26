@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
+    [DebuggerDisplay("Name:{Name}, Text:{Text}")]
     public class Parameter : Record
     {
         public int IndexInSheet;
