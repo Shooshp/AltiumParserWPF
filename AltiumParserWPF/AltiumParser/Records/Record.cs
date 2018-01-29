@@ -94,7 +94,7 @@ namespace AltiumParserWPF.AltiumParser.Records
                 {
                     foreach (var net in parser.Nets)
                     {
-                        if (wire.ContainsDot(net.Connection))
+                        if (wire.DotIsOnLine(net.Connection))
                         {
                             if (!ConnectedNets.Exists(x=>x.UniqueId == net.UniqueId))
                             {
@@ -112,9 +112,12 @@ namespace AltiumParserWPF.AltiumParser.Records
 
             foreach (var port in parser.Ports)
             {
-                if (port.Connection.IsMatch(Connection))
+                foreach (var connectiondot in port.ConnectionsDots)
                 {
-                    ConnectedPorts.Add(port);
+                    if (connectiondot.IsMatch(Connection))
+                    {
+                        ConnectedPorts.Add(port);
+                    }
                 }
             }
 
@@ -124,12 +127,15 @@ namespace AltiumParserWPF.AltiumParser.Records
                 {
                     foreach (var port in parser.Ports)
                     {
-                        if (wire.ContainsDot(port.Connection))
+                        foreach (var connectiondot in port.ConnectionsDots)
                         {
-                            if (!ConnectedPorts.Exists(x=>x.UniqueId == port.UniqueId))
+                            if (wire.ContainsDot(connectiondot))
                             {
-                                ConnectedPorts.Add(port);
-                            }                           
+                                if (!ConnectedPorts.Exists(x => x.UniqueId == port.UniqueId))
+                                {
+                                    ConnectedPorts.Add(port);
+                                }
+                            }
                         }
                     }
                 }
@@ -154,7 +160,7 @@ namespace AltiumParserWPF.AltiumParser.Records
                 {
                     foreach (var powerport in parser.PowerPorts)
                     {
-                        if (wire.ContainsDot(powerport.Connection))
+                        if (wire.DotIsOnLine(powerport.Connection))
                         {
                             if (!ConnectedPowerPorts.Exists(x=>x.UniqueId == powerport.UniqueId))
                             {
@@ -208,8 +214,16 @@ namespace AltiumParserWPF.AltiumParser.Records
                                             {
                                                 if (junction.Connection.IsMatch(wireDot)) 
                                                 {
-                                                    ConnectedWires.Add(wire);
-                                                    isupdated = true;
+                                                    if (!ConnectedWires.Exists(w => w.UniqueId == wire.UniqueId))
+                                                    {
+                                                        ConnectedWires.Add(wire);
+                                                        isupdated = true;
+                                                    }
+                                                }
+
+                                                if (isupdated)
+                                                {
+                                                    break;
                                                 }
                                             }
 

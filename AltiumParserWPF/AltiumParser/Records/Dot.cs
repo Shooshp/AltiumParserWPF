@@ -27,7 +27,7 @@ namespace AltiumParserWPF.AltiumParser.Records
         {
             var xabsdiff = Math.Abs(dot.X - X);
             var yabsdiff = Math.Abs(dot.Y - Y);
-            if (xabsdiff < 1 && yabsdiff < 1)
+            if (xabsdiff < 2 && yabsdiff < 2)
             {
                 return true;
             }

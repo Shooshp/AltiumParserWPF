@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using AltiumParserWPF.AltiumParser.Records;
@@ -25,6 +27,10 @@ namespace AltiumParserWPF.AltiumParser
         public List<SheetName> SheetsNames;
         public List<SheetFile> SheetFiles;
         public List<Parameter> Parameters;
+
+        public List<BOMEntry> BuildOfMaterials;
+
+        public List<SubPart> SubParts;
 
         public AltiumParser(string filepath)
         {
@@ -66,9 +72,13 @@ namespace AltiumParserWPF.AltiumParser
             SheetFiles = new List<SheetFile>();
             Parameters = new List<Parameter>();
 
+            BuildOfMaterials = new List<BOMEntry>();
+            SubParts = new List<SubPart>();
 
             ParseRecords();
             BuildComponents();
+            GetBom();
+            GetSubParts();
         }
 
         private void ParseRecords()
@@ -282,6 +292,42 @@ namespace AltiumParserWPF.AltiumParser
             foreach (var sheetSymbol in SheetSymbols)
             {
                 sheetSymbol.Init(this);
+            }
+        }
+
+        private void GetBom()
+        {
+            foreach (var component in Components)
+            {
+                if (component.CurrentPartId == 1)
+                {
+                    if (!BuildOfMaterials.Exists(x => x.DeviceType == component.DesignItemId))
+                    {
+                        BuildOfMaterials.Add(new BOMEntry(component.DesignItemId, component.Designator.Text));
+                    }
+                    else
+                    {
+                        BuildOfMaterials.Single(x => x.DeviceType == component.DesignItemId).Designators.Add(component.Designator.Text);
+                    }
+                }
+            }
+        }
+
+        private void GetSubParts()
+        {
+            var path = FilePath.Replace(Path.GetFileName(FilePath), "");
+            foreach (var sheetSymbol in SheetSymbols)
+            {
+                var subpartpath = path + sheetSymbol.SheetFile.Text;
+
+                if (!SubParts.Exists(x=>x.SubParser.FilePath == subpartpath))
+                {
+                    SubParts.Add(new SubPart(subpartpath, sheetSymbol.SheetName.Text));
+                }
+                else
+                {
+                    SubParts.Single(x=> x.SubParser.FilePath == subpartpath).Names.Add(sheetSymbol.SheetName.Text);
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -7,6 +8,7 @@ using System.Windows.Media;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
+    [DebuggerDisplay("Wire: {UniqueId}, Dots: {WireDotList.Count}")]
     public class Wire : Record
     {
         public int IndexInSheet;
@@ -80,7 +82,7 @@ namespace AltiumParserWPF.AltiumParser.Records
             }
         }
 
-        public bool ContainsDot(Dot dot)
+        public bool DotIsOnLine(Dot dot)
         {
             var ChekDot = new Point(dot.X, dot.Y);
 
@@ -95,12 +97,17 @@ namespace AltiumParserWPF.AltiumParser.Records
 
                 var line = new LineGeometry(start, end);
 
-                if (line.FillContains(ChekDot, 0.2, ToleranceType.Relative))
+                if (line.FillContains(ChekDot, 2, ToleranceType.Absolute))
                 {
                     return true;
                 }
             }
 
+            return false;
+        }
+
+        public bool ContainsDot(Dot dot)
+        {
             foreach (var wiredot in WireDotList)
             {
                 if (wiredot.IsMatch(dot))

@@ -43,6 +43,11 @@ namespace AltiumParserWPF
                     }
                 }
             }
+
+            foreach (var entry in parser.BuildOfMaterials)
+            {
+                Console.WriteLine(entry);
+            }
         }
     }
 }

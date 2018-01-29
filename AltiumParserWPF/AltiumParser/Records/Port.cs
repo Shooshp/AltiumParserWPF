@@ -1,5 +1,10 @@
-﻿namespace AltiumParserWPF.AltiumParser.Records
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+
+namespace AltiumParserWPF.AltiumParser.Records
 {
+    [DebuggerDisplay("Port: {Name}")]
     public class Port : Record
     {
         public int IndexInSheet;
@@ -16,16 +21,28 @@
         public string Name;
         public string UniqueId;
         public int Height;
+        public List<Dot> ConnectionsDots;
+        public float XOffset;
 
         public Port(string record)
         {
+            ConnectionsDots = new List<Dot>();
+
             IsConnectable = true;
 
             TrimRecord(record);
             ExtractParameters();
             AllocateValues(this);
 
-            Connection = new Dot(Location_X, Location_X_Frac, Location_Y, Location_Y_Frac);
+            var temp = Width + "." + Width_Frac;
+
+            XOffset = float.Parse(temp, CultureInfo.InvariantCulture.NumberFormat);
+
+            var FirstDot = new Dot(Location_X, Location_X_Frac, Location_Y, Location_Y_Frac);
+            var SecondDot = new Dot(FirstDot.X + XOffset, FirstDot.Y);
+            
+            ConnectionsDots.Add(FirstDot);
+            ConnectionsDots.Add(SecondDot);
         }
     }
 }
