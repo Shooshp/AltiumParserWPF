@@ -96,15 +96,78 @@ namespace AltiumParserWPF.AltiumParser.Records
                     {
                         if (wire.ContainsDot(net.Connection))
                         {
-                            ConnectedNets.Add(net);
+                            if (!ConnectedNets.Exists(x=>x.UniqueId == net.UniqueId))
+                            {
+                                ConnectedNets.Add(net);
+                            }
                         }
                     }                    
                 }
             }
         }
 
+        public void CheckPorts(AltiumParser parser)
+        {
+            ConnectedPorts = new List<Port>();
 
-        public void ChekWires(AltiumParser parser)
+            foreach (var port in parser.Ports)
+            {
+                if (port.Connection.IsMatch(Connection))
+                {
+                    ConnectedPorts.Add(port);
+                }
+            }
+
+            if (ConnectedWires.Count != 0)
+            {
+                foreach (var wire in ConnectedWires)
+                {
+                    foreach (var port in parser.Ports)
+                    {
+                        if (wire.ContainsDot(port.Connection))
+                        {
+                            if (!ConnectedPorts.Exists(x=>x.UniqueId == port.UniqueId))
+                            {
+                                ConnectedPorts.Add(port);
+                            }                           
+                        }
+                    }
+                }
+            }
+        }
+
+        public void CheckPowerPorts(AltiumParser parser)
+        {
+            ConnectedPowerPorts = new List<PowerPort>();
+
+            foreach (var powerport in parser.PowerPorts)
+            {
+                if (powerport.Connection.IsMatch(Connection))
+                {
+                    ConnectedPowerPorts.Add(powerport);
+                }
+            }
+
+            if (ConnectedWires.Count != 0)
+            {
+                foreach (var wire in ConnectedWires)
+                {
+                    foreach (var powerport in parser.PowerPorts)
+                    {
+                        if (wire.ContainsDot(powerport.Connection))
+                        {
+                            if (!ConnectedPowerPorts.Exists(x=>x.UniqueId == powerport.UniqueId))
+                            {
+                                ConnectedPowerPorts.Add(powerport);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        public void CheckWires(AltiumParser parser)
         {
             ConnectedWires = new List<Wire>();
 

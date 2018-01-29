@@ -1,7 +1,9 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
+    [DebuggerDisplay("{Name}")]
     public class SheetEntry : Record
     {
         public int OwnerIndex;

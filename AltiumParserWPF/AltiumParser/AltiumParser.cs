@@ -233,7 +233,6 @@ namespace AltiumParserWPF.AltiumParser
                             case 34:
                                 Console.WriteLine(@"Found record type Designator " + counter);
                                 Designators.Add(new Designator(record));
-                                //TODO: Parse Designator
                                 break;
 
                             case 37:
@@ -277,18 +276,12 @@ namespace AltiumParserWPF.AltiumParser
         {
             foreach (var component in Components)
             {
-                component.CombineProperties(Pins, Designators, Parameters);
+                component.Init(this);
             }
 
             foreach (var sheetSymbol in SheetSymbols)
             {
-                sheetSymbol.CombineProperties(SheetEntries, SheetsNames, SheetFiles, Parameters);
-            }
-
-            foreach (var entry in SheetEntries)
-            {
-                entry.ChekWires(this);
-                entry.CheckNets(this);
+                sheetSymbol.Init(this);
             }
         }
     }

@@ -43,22 +43,21 @@ namespace AltiumParserWPF.AltiumParser.Records
             Connection = new Dot(Location_X, Location_X_Frac, Location_Y, Location_Y_Frac);
         }
 
-        public void CombineProperties(List<Pin> pins, List<Designator> designators, List<Parameter> parameters)
+        public void Init(AltiumParser parser)
         {
             PinList = new List<Pin>();
             AdditionalParameters = new List<Parameter>();
 
-
-            foreach (var pin in pins)
+            foreach (var pin in parser.Pins)
             {
                 if (pin.OwnerIndex == Id && pin.OwnerpartId == CurrentPartId)
                 {
                     PinList.Add(pin);
                 }
             }
-     
 
-            foreach (var designator in designators)
+
+            foreach (var designator in parser.Designators)
             {
                 if (designator.OwnerIndex == Id)
                 {
@@ -66,12 +65,20 @@ namespace AltiumParserWPF.AltiumParser.Records
                 }
             }
 
-            foreach (var parameter in parameters)
+            foreach (var parameter in parser.Parameters)
             {
                 if (parameter.OwnerIndex == Id)
                 {
                     AdditionalParameters.Add(parameter);
                 }
+            }
+
+            foreach (var pin in PinList)
+            {
+                pin.CheckWires(parser);
+                pin.CheckNets(parser);
+                pin.CheckPorts(parser);
+                pin.CheckPowerPorts(parser); 
             }
         }
     }

@@ -101,6 +101,14 @@ namespace AltiumParserWPF.AltiumParser.Records
                 }
             }
 
+            foreach (var wiredot in WireDotList)
+            {
+                if (wiredot.IsMatch(dot))
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
     }

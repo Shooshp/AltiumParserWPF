@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
+    [DebuggerDisplay("{SheetName.Text}")]
     public class SheetSymbol : Record
     {
         public int IndexInSheet;
@@ -46,12 +48,12 @@ namespace AltiumParserWPF.AltiumParser.Records
             TopRightConer = new Dot(TopLeftConer.X + XOffset, TopLeftConer.Y);
         }
 
-        public void CombineProperties(List<SheetEntry> sheetEntries, List<SheetName> sheetNames, List<SheetFile> sheetsFiles, List<Parameter> parameters)
+        public void Init(AltiumParser parser)
         {
             SheetEntriesList = new List<SheetEntry>();
             AdditionalParameters = new List<Parameter>();
 
-            foreach (var sheetEntry in sheetEntries)
+            foreach (var sheetEntry in parser.SheetEntries)
             {
                 if (sheetEntry.OwnerIndex == Id)
                 {
@@ -59,7 +61,7 @@ namespace AltiumParserWPF.AltiumParser.Records
                 }
             }
 
-            foreach (var sheetName in sheetNames)
+            foreach (var sheetName in parser.SheetsNames)
             {
                 if (sheetName.OwnerIndex == Id)
                 {
@@ -67,7 +69,7 @@ namespace AltiumParserWPF.AltiumParser.Records
                 }
             }
 
-            foreach (var parameter in parameters)
+            foreach (var parameter in parser.Parameters)
             {
                 if (parameter.OwnerIndex == Id)
                 {
@@ -75,7 +77,7 @@ namespace AltiumParserWPF.AltiumParser.Records
                 }
             }
 
-            foreach (var sheetFile in sheetsFiles)
+            foreach (var sheetFile in parser.SheetFiles)
             {
                 if (sheetFile.OwnerIndex == Id)
                 {
@@ -93,6 +95,14 @@ namespace AltiumParserWPF.AltiumParser.Records
                 {
                     sheetEntry.Connection = new Dot(TopRightConer.X, TopRightConer.Y - sheetEntry.CombinedDistanceFromTop);
                 }
+            }
+
+            foreach (var sheetEntry in SheetEntriesList)
+            {
+                sheetEntry.CheckWires(parser);
+                sheetEntry.CheckNets(parser);
+                sheetEntry.CheckPorts(parser);
+                sheetEntry.CheckPowerPorts(parser);
             }
         }
     }
