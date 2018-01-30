@@ -79,6 +79,7 @@ namespace AltiumParserWPF.AltiumParser
             BuildComponents();
             GetBom();
             GetSubParts();
+            
         }
 
         private void ParseRecords()
@@ -327,6 +328,38 @@ namespace AltiumParserWPF.AltiumParser
                 else
                 {
                     SubParts.Single(x=> x.SubParser.FilePath == subpartpath).Names.Add(sheetSymbol.SheetName.Text);
+                }
+            }
+        }
+
+        private void CombineBoms()
+        {
+            foreach (var subPart in SubParts)
+            {
+                foreach (var subPartName in subPart.Names)
+                {
+                    foreach (var bomEntry in subPart.SubParser.BuildOfMaterials)
+                    {
+                        if (BuildOfMaterials.Exists(x => x.DeviceType == bomEntry.DeviceType))
+                        {
+                            foreach (var designator in bomEntry.Designators)
+                            {
+                                BuildOfMaterials.Single(x => x.DeviceType == bomEntry.DeviceType).Designators.Add(subPartName.ToUpper()+"_"+designator);
+                            }
+                        }
+                        else
+                        {
+                            BuildOfMaterials.Add(new BOMEntry(bomEntry.DeviceType, subPartName.ToUpper() + "_" + bomEntry.Designators.ElementAt(0)));
+
+                            foreach (var designator in bomEntry.Designators)
+                            {
+                                if (!BuildOfMaterials.Single(x => x.DeviceType == bomEntry.DeviceType).Designators.Exists(x=>x.Equals(subPartName.ToUpper() + "_" + designator)))
+                                {
+                                    BuildOfMaterials.Single(x => x.DeviceType == bomEntry.DeviceType).Designators.Add(subPartName.ToUpper() + "_" + designator);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
