@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace AltiumParserWPF.AltiumParser
 {
-    public class BOMEntry
+    public class BomEntry
     {
         public string DeviceType;
         public List<string> Designators;
 
-        public BOMEntry(string deviceType, string designator)
+        public BomEntry(string deviceType, string designator)
         {
             Designators = new List<string>();
             DeviceType = deviceType;

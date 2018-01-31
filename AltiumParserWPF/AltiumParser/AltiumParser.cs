@@ -28,7 +28,7 @@ namespace AltiumParserWPF.AltiumParser
         public List<SheetFile> SheetFiles;
         public List<Parameter> Parameters;
 
-        public List<BOMEntry> BuildOfMaterials;
+        public List<BomEntry> BuildOfMaterials;
 
         public List<SubPart> SubParts;
 
@@ -72,14 +72,14 @@ namespace AltiumParserWPF.AltiumParser
             SheetFiles = new List<SheetFile>();
             Parameters = new List<Parameter>();
 
-            BuildOfMaterials = new List<BOMEntry>();
+            BuildOfMaterials = new List<BomEntry>();
             SubParts = new List<SubPart>();
 
             ParseRecords();
             BuildComponents();
             GetBom();
             GetSubParts();
-            
+            CombineBoms();
         }
 
         private void ParseRecords()
@@ -102,177 +102,142 @@ namespace AltiumParserWPF.AltiumParser
                         switch (type)
                         {
                             case 1:
-                                Console.WriteLine(@"Found record type Component " + counter);
                                 Components.Add(new Component(record, counter));
                                 break;
 
                             case 2:
-                                Console.WriteLine(@"Found record type Pin " + counter);
                                 Pins.Add(new Pin(record));
                                 break;
 
                             case 3:
-                                Console.WriteLine(@"Found record type Symbol " + counter);
                                 //TODO: Parse Symbol
                                 break;
 
                             case 4:
-                                Console.WriteLine(@"Found record type Label " + counter);
                                 //TODO: Parse Label
                                 break;
 
                             case 5:
-                                Console.WriteLine(@"Found record type Bezier " + counter);
                                 //TODO: Parse Bezier
                                 break;
 
                             case 6:
-                                Console.WriteLine(@"Found record type Polyline " + counter);
                                 //TODO: Parse Polyline
                                 break;
 
                             case 7:
-                                Console.WriteLine(@"Found record type Polygon " + counter);
                                 //TODO: Parse Polygon
                                 break;
 
                             case 8:
-                                Console.WriteLine(@"Found record type Ellipse " + counter);
                                 //TODO: Parse Ellipse
                                 break;
 
                             case 9:
-                                Console.WriteLine(@"Found record type Piechart " + counter);
                                 //TODO: Parse Piechart
                                 break;
 
                             case 10:
-                                Console.WriteLine(@"Found record type Round rectangle " + counter);
                                 //TODO: Parse Round rectangle
                                 break;
 
                             case 11:
-                                Console.WriteLine(@"Found record type Elliptical arc " + counter);
                                 //TODO: Parse Elliptical arc
                                 break;
 
                             case 12:
-                                Console.WriteLine(@"Found record type Arc " + counter);
                                 //TODO: Parse Arc
                                 break;
 
                             case 13:
-                                Console.WriteLine(@"Found record type Line " + counter);
                                 //TODO: Parse Line
                                 break;
 
                             case 14:
-                                Console.WriteLine(@"Found record type Rectangle " + counter);
                                 //TODO: Parse Rectangle
                                 break;
 
                             case 15:
-                                Console.WriteLine(@"Found record type Sheet symbol " + counter);
                                 SheetSymbols.Add(new SheetSymbol(record, counter));
                                 break;
 
                             case 16:
-                                Console.WriteLine(@"Found record type Sheet entry " + counter);
                                 SheetEntries.Add(new SheetEntry(record));
                                 break;
 
                             case 17:
-                                Console.WriteLine(@"Found record type Power port " + counter);
                                 PowerPorts.Add(new PowerPort(record));
                                 break;
 
                             case 18:
-                                Console.WriteLine(@"Found record type Port " + counter);
                                 Ports.Add(new Port(record));
                                 break;
 
                             case 22:
-                                Console.WriteLine(@"Found record type No ERC " + counter);
                                 //TODO: Parse No ERC
                                 break;
 
                             case 25:
-                                Console.WriteLine(@"Found record type Net label " + counter);
                                 Nets.Add(new Net(record));
                                 break;
 
                             case 26:
-                                Console.WriteLine(@"Found record type Bus " + counter);
                                 //TODO: Parse Bus
                                 break;
 
                             case 27:
-                                Console.WriteLine(@"Found record type Wire " + counter);
                                 Wires.Add(new Wire(record));
                                 break;
 
                             case 28:
-                                Console.WriteLine(@"Found record type Text frame " + counter);
                                 //TODO: Parse Text frame
                                 break;
 
                             case 29:
-                                Console.WriteLine(@"Found record type Junction " + counter);
                                 Junctions.Add(new Junction(record));
                                 break;
 
                             case 30:
-                                Console.WriteLine(@"Found record type Image " + counter);
                                 //TODO: Parse Image
                                 break;
 
                             case 31:
-                                Console.WriteLine(@"Found record type Sheet " + counter);
                                 //TODO: Parse Sheet
                                 break;
 
                             case 32:
-                                Console.WriteLine(@"Found record type Sheet name" + counter);
                                 SheetsNames.Add(new SheetName(record));
                                 break;
 
                             case 33:
-                                Console.WriteLine(@"Found record type Sheet file name " + counter);
                                 SheetFiles.Add(new SheetFile(record));
                                 break;
 
                             case 34:
-                                Console.WriteLine(@"Found record type Designator " + counter);
                                 Designators.Add(new Designator(record));
                                 break;
 
                             case 37:
-                                Console.WriteLine(@"Found record type Bus entry " + counter);
                                 //TODO: Parse Bus entry
                                 break;
 
                             case 39:
-                                Console.WriteLine(@"Found record type Template " + counter);
                                 //TODO: Parse Template
                                 break;
 
                             case 41:
-                                Console.WriteLine(@"Found record type Parameter " + counter);
                                 Parameters.Add(new Parameter(record));
                                 break;
 
                             case 43:
-                                Console.WriteLine(@"Found record type Warning sign " + counter);
                                 //TODO: Parse Warning sign
                                 break;
 
                             case 44:
-                                Console.WriteLine(@"Found record type Implementation list " + counter);
                                 //TODO: Parse Implementation list
                                 break;
 
                             case 45:
-                                Console.WriteLine(@"Found record type Implementation " + counter);
                                 //TODO: Parse Implementation
                                 break;
 
@@ -304,7 +269,7 @@ namespace AltiumParserWPF.AltiumParser
                 {
                     if (!BuildOfMaterials.Exists(x => x.DeviceType == component.DesignItemId))
                     {
-                        BuildOfMaterials.Add(new BOMEntry(component.DesignItemId, component.Designator.Text));
+                        BuildOfMaterials.Add(new BomEntry(component.DesignItemId, component.Designator.Text));
                     }
                     else
                     {
@@ -349,7 +314,7 @@ namespace AltiumParserWPF.AltiumParser
                         }
                         else
                         {
-                            BuildOfMaterials.Add(new BOMEntry(bomEntry.DeviceType, subPartName.ToUpper() + "_" + bomEntry.Designators.ElementAt(0)));
+                            BuildOfMaterials.Add(new BomEntry(bomEntry.DeviceType, subPartName.ToUpper() + "_" + bomEntry.Designators.ElementAt(0)));
 
                             foreach (var designator in bomEntry.Designators)
                             {
