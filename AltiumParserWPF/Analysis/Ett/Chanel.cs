@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace AltiumParserWPF.Analysis.Ett
 {
     public class Chanel
     {
-        public string Name;
-        public string Connection;
-        public Directions Direction;
+        public string ChanelName;
+        public string ConnectionName;
+        public List<string> ConnectedObjects;
 
         public Chanel(string name, string connection)
         {
-            Name = name;
-            Connection = connection;
-            Direction = Directions.Unknown;
-        }
-
-        public enum Directions
-        {
-            Input, Output, Biderectional, Unknown
+            ChanelName = name;
+            ConnectionName = connection;
+            ConnectedObjects = new List<string>();
         }
     }
 }

@@ -77,6 +77,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="AlphanumComparatorFast.cs" />
     <Compile Include="AltiumParser\AltiumParser.cs" />
     <Compile Include="AltiumParser\BOMEntry.cs" />
     <Compile Include="AltiumParser\Records\Component.cs" />
@@ -96,8 +97,9 @@
     <Compile Include="AltiumParser\Records\Wire.cs" />
     <Compile Include="AltiumParser\SubPart.cs" />
     <Compile Include="Analysis\Ett\Chanel.cs" />
+    <Compile Include="Analysis\Ett\ConnectionUnion.cs" />
     <Compile Include="Analysis\Ett\DUT.cs" />
-    <Compile Include="Analysis\Ett\EttBoard.cs" />
+    <Compile Include="Analysis\Ett\PCB.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
