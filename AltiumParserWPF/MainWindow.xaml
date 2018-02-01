@@ -4,9 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AltiumParserWPF"
+        xmlns:ett="clr-namespace:AltiumParserWPF.Analysis.Ett"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <DataGrid></DataGrid>
+        <TreeView Name="TreeView">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type ett:ConnectionUnion}" ItemsSource="{Binding DispalyName}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding DispalyName}"/>
+                        <TextBlock Text="{Binding Type}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type ett:Chanel}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding ChanelName}"/>
+                        <TextBlock Text="{Binding ConnectionName}"/>
+                        <TextBlock Text="{Binding Elements}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TreeView.Resources>
+        </TreeView>
     </Grid>
 </Window>

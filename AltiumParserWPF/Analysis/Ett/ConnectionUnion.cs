@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,24 @@ namespace AltiumParserWPF.Analysis.Ett
     public class ConnectionUnion
     {
         public string Name;
-        public List<Chanel> Chanels;
+        public List<Chanel> Chanels { get; set; }
+        public ConnectionType Type { get; set; }
+
+        public string DispalyName
+        {
+            get
+            {
+                if (Chanels.Count == 1)
+                {
+                    return Name;
+                }
+                else
+                {
+                    var line = Name + "[" + Chanels.Count + "]";
+                    return line;
+                }
+            }
+        }
 
         public ConnectionUnion(string name)
         {
@@ -21,6 +39,16 @@ namespace AltiumParserWPF.Analysis.Ett
         public void Add(Chanel chanel)
         {
             Chanels.Add(chanel);
+        }
+
+        public enum ConnectionType
+        {
+            [Description("Array")]
+            Array,
+            [Description("Bus")]
+            Bus,
+            [Description("Global")]
+            Global
         }
 
         public override string ToString()

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using AltiumParserWPF.AltiumParser.Records;
+using System.Threading;
+using System.Windows.Data;
 using AltiumParserWPF.Analysis.Ett;
 
 namespace AltiumParserWPF
@@ -26,7 +26,7 @@ namespace AltiumParserWPF
             {
                 case PcbAnalysis.PcbTypes.EttNew:
                     var pcb = new NewEttBoard(parser);
-                    Connections = pcb.GetConnections();
+                    Connections = pcb.Connections;
                     break;
             }
 
@@ -34,6 +34,13 @@ namespace AltiumParserWPF
             {
                 Console.WriteLine(connection);
             }
+
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                TreeView.ItemsSource = Connections;
+            }));
         }
+
+        
     }
 }

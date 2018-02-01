@@ -94,6 +94,11 @@ namespace AltiumParserWPF
                 if (counter == DutCount)
                 {
                     connectionUinion.Chanels.RemoveRange(1, DutCount-1);
+                    connectionUinion.Type = ConnectionUnion.ConnectionType.Global;
+                }
+                else
+                {
+                    connectionUinion.Type = ConnectionUnion.ConnectionType.Array;
                 }
             }
 
