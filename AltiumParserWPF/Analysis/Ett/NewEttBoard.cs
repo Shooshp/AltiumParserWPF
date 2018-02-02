@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using AltiumParserWPF.Analysis;
 using AltiumParserWPF.Analysis.Ett;
 
@@ -19,7 +18,9 @@ namespace AltiumParserWPF
             DutCount = GetDutNumber();
             Chanels = new List<Chanel>();
             GetActiveChanels();
-            GetConnections();
+            
+            Connections = new List<ConnectionUnion>();
+            Connections = GetConnections();
         }
 
         private void GetActiveChanels()
@@ -51,15 +52,15 @@ namespace AltiumParserWPF
 
         public List<ConnectionUnion> GetConnections()
         {
-            Connections = new List<ConnectionUnion>();
+            var tempconnections = new List<ConnectionUnion>();
 
             foreach (var dut in Duts)
             {
                 foreach (var entryPoint in dut.Connections)
                 {
-                    if (!Connections.Exists(x=>x.Name == entryPoint.Name))
+                    if (!tempconnections.Exists(x=>x.Name == entryPoint.Name))
                     {
-                        Connections.Add(new ConnectionUnion(entryPoint.Name));
+                        tempconnections.Add(new ConnectionUnion(entryPoint.Name));
                     }
 
                     foreach (var chanel in Chanels)
@@ -67,15 +68,15 @@ namespace AltiumParserWPF
                         if (chanel.ConnectionName == entryPoint.Connection)
                         {
                             chanel.ConnectedObjects.Add(dut.Name + ":" + entryPoint.Name);
-                            Connections.Single(x => x.Name == entryPoint.Name).Add(chanel);
+                            tempconnections.Single(x => x.Name == entryPoint.Name).Add(chanel);
                         }
                     }
                 }
             }
 
-            Connections.RemoveAll(x => x.Chanels.Count == 0);
+            tempconnections.RemoveAll(x => x.Chanels.Count == 0);
 
-            foreach (var connectionUinion in Connections)
+            foreach (var connectionUinion in tempconnections)
             {
                 var counter = 1;
                 var tempname = "";
@@ -94,19 +95,14 @@ namespace AltiumParserWPF
                 if (counter == DutCount)
                 {
                     connectionUinion.Chanels.RemoveRange(1, DutCount-1);
-                    connectionUinion.Type = ConnectionUnion.ConnectionType.Global;
-                }
-                else
-                {
-                    connectionUinion.Type = ConnectionUnion.ConnectionType.Array;
-                }
+                }               
             }
 
             foreach (var chanel in Chanels)
             {
                 var isConnected = false;
 
-                foreach (var connectionUinion in Connections)
+                foreach (var connectionUinion in tempconnections)
                 {
                     foreach (var connectedChanel in connectionUinion.Chanels)
                     {
@@ -119,12 +115,26 @@ namespace AltiumParserWPF
 
                 if (!isConnected)
                 {
-                    Connections.Add(new ConnectionUnion(chanel.ConnectionName));
-                    Connections.Single(x=>x.Name == chanel.ConnectionName).Add(chanel);
+                    tempconnections.Add(new ConnectionUnion(chanel.ConnectionName));
+                    tempconnections.Single(x=>x.Name == chanel.ConnectionName).Add(chanel);
                 }
             }
 
-            return Connections;
+            foreach (var connectionUnion in tempconnections)
+            {
+                if (connectionUnion.Chanels.Count == 1)
+                {
+                    connectionUnion.Type = ConnectionUnion.ConnectionType.Global;
+                }
+                else
+                {
+                    connectionUnion.Type = ConnectionUnion.ConnectionType.Array;
+                }
+            }
+
+            var sortedconnections = tempconnections.OrderBy(x => x, new AlphanumComparatorFast()).ToList();
+
+            return sortedconnections;
         }
 
         public void PrintReport()

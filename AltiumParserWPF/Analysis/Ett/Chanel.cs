@@ -10,7 +10,7 @@ namespace AltiumParserWPF.Analysis.Ett
 
         public List<string> ConnectedObjects { get; set; }
 
-    public string Elements
+        public string Elements
         {
             get
             {

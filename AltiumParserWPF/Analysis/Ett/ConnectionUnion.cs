@@ -12,7 +12,7 @@ namespace AltiumParserWPF.Analysis.Ett
         public List<Chanel> Chanels { get; set; }
         public ConnectionType Type { get; set; }
 
-        public string DispalyName
+        public string DisplayName
         {
             get
             {
