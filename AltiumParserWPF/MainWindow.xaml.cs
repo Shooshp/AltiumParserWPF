@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows;
 using System.Windows.Data;
 using AltiumParserWPF.Analysis.Ett;
 
@@ -8,11 +9,13 @@ namespace AltiumParserWPF
 {
     public partial class MainWindow
     {
-        public List<ConnectionUnion> Connections;
+        public List<ConnectionUnion> Connections { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
+
+            Connections = new List<ConnectionUnion>();
 
             var filename = @"F:\SN74LVCH245ADBR_ETT_v2\SN74LVCH245ADBR_ETT_v2.SchDoc";
             //var filename = @"F:\MAX4508ESE_ETT_v2\MAX4508ESE_ETT_v2.SchDoc";
@@ -20,7 +23,7 @@ namespace AltiumParserWPF
             var parser = new AltiumParser.AltiumParser(filename);
             var type = PcbAnalysis.GetPsbType(parser);
 
-            Connections = new List<ConnectionUnion>();
+            
 
             switch (type)
             {
@@ -35,12 +38,7 @@ namespace AltiumParserWPF
                 Console.WriteLine(connection);
             }
 
-            Dispatcher.BeginInvoke(new ThreadStart(delegate
-            {
-                TreeView.ItemsSource = Connections;
-            }));
-        }
-
-        
+            DataContext = Connections;
+        } 
     }
 }

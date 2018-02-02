@@ -6,24 +6,79 @@
         xmlns:local="clr-namespace:AltiumParserWPF"
         xmlns:ett="clr-namespace:AltiumParserWPF.Analysis.Ett"
         mc:Ignorable="d"
+        Name="myWindow"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <TreeView Name="TreeView">
-            <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type ett:ConnectionUnion}" ItemsSource="{Binding DispalyName}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding DispalyName}"/>
-                        <TextBlock Text="{Binding Type}"/>
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-                <DataTemplate DataType="{x:Type ett:Chanel}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding ChanelName}"/>
-                        <TextBlock Text="{Binding ConnectionName}"/>
-                        <TextBlock Text="{Binding Elements}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </TreeView.Resources>
-        </TreeView>
+    <Grid Margin="10">
+        <Border BorderBrush="Black" BorderThickness="1">
+
+            <Border.Resources>
+                <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}">
+                    <Setter Property="Margin" Value="3 0 3 0"/>
+                </Style>
+                <Style x:Key="TextBlockBoldStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockStyle}">
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+            </Border.Resources>
+
+            <Grid Grid.IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <!-- Column headers -->
+                <TreeViewItem Grid.Row="0" BorderThickness="1">
+                    <TreeViewItem.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="Name"/>
+                                <!-- Placeholders for two columns of ToggleButton -->
+                                <ColumnDefinition SharedSizeGroup="Toggle"/>
+                                <ColumnDefinition SharedSizeGroup="Toggle"/>
+                                <ColumnDefinition SharedSizeGroup="Type"/>
+                                <ColumnDefinition SharedSizeGroup="Chanel"/>
+                                <ColumnDefinition SharedSizeGroup="Connections"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Name" Style="{StaticResource TextBlockStyle}"/>
+                            <!-- Empty TreeViewItem to measure the size of its ToggleButton into the "Toggle" group-->
+                            <TextBlock Grid.Column="1" Padding="0"/>
+                            <TextBlock Grid.Column="3" Text="Type" Style="{StaticResource TextBlockStyle}"/>
+                            <TextBlock Grid.Column="4" Text="Chanel" Style="{StaticResource TextBlockStyle}"/>
+                            <TextBlock Grid.Column="5" Text="Connections" Style="{StaticResource TextBlockStyle}"/>
+                        </Grid>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <!-- Data rows -->
+                <TreeView Grid.Row="1" ItemsSource="{Binding}" BorderBrush="Gray" BorderThickness="0 1 0 0">
+                    <TreeView.ItemTemplate>
+
+                        <!-- Level 0 template leaves space for 2 child "Toggle" levels -->
+                        <HierarchicalDataTemplate ItemsSource="{Binding Chanels}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="Name"/>
+                                    <ColumnDefinition SharedSizeGroup="Toggle"/>
+                                    <ColumnDefinition SharedSizeGroup="Toggle"/>
+                                    <ColumnDefinition SharedSizeGroup="Type"/>
+                                    <ColumnDefinition SharedSizeGroup="Chanel"/>
+                                    <ColumnDefinition SharedSizeGroup="Connections"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding DispalyName}" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Grid.Column="3" Text="{Binding Type}" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Grid.Column="4" Text="{Binding Chanels.Count}" Style="{StaticResource TextBlockStyle}"/>
+                            </Grid>
+
+                        </HierarchicalDataTemplate>
+
+
+                    </TreeView.ItemTemplate>
+
+                </TreeView>
+
+
+
+            </Grid>
+        </Border>
     </Grid>
 </Window>
