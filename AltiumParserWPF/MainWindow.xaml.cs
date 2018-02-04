@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
+using AltiumParserWPF.Analysis;
 using AltiumParserWPF.Analysis.Ett;
 
 namespace AltiumParserWPF
@@ -14,16 +13,14 @@ namespace AltiumParserWPF
     {
         public List<ConnectionUnion> Connections { get; set; }
 
-        public MainWindow()
+        public MainWindow(string path)
         {
-            InitializeComponent();
             Connections = new List<ConnectionUnion>();
+            InitializeComponent();
+
             myWindow.SizeChanged += MyWindowOnSizeChanged;
 
-            //var filename = @"\\S14\нц сэо\Проекты\Тип ЭРИ_5576РТ1У\Проект ПП (Altium) ЭТТ\5576RT1U_ETT\5576РТ1У_QFP-64-S_ЕТТ_V3\5576РТ1У_QFP-64-S_ЕТТ_V3.SchDoc";
-            var filename = @"F:\MAX4508ESE_ETT_v2\MAX4508ESE_ETT_v2.SchDoc";
-
-            var parser = new AltiumParser.AltiumParser(filename);
+            var parser = new AltiumParser.AltiumParser(path);
             var type = PcbAnalysis.GetPsbType(parser);
 
             switch (type)
@@ -39,9 +36,11 @@ namespace AltiumParserWPF
                 Console.WriteLine(connection);
             }
 
+
             ConnectionList.ItemsSource = Connections;
             ConnectionList.SelectionChanged += ConnectionListOnSelectionChanged;
         }
+
 
         private void ConnectionListOnSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
@@ -60,6 +59,205 @@ namespace AltiumParserWPF
             var rightListThickness = new Thickness(left: width, bottom: 50, right:0, top: 0);
             ConnectionList.Margin = leftLisThickness;
             SelectedUnion.Margin = rightListThickness;
+            SelectedUnion.Columns[2].Width = SelectedUnion.ActualWidth - SelectedUnion.Columns[1].ActualWidth -
+                                             SelectedUnion.Columns[0].ActualWidth - 25;
+        }
+
+        private void MergeClick(object sender, RoutedEventArgs e)
+        {
+            var selected = ConnectionList.SelectedItems;
+            var unions = new List<ConnectionUnion>();
+
+            foreach (ConnectionUnion item in selected)
+            {
+                unions.Add(item);
+            }
+
+            if (unions.Count != 1)
+            {
+                var tempunion = new ConnectionUnion("new");
+
+                var dialog = new PopupDialog("Введите имя для нового массива.");
+                if (dialog.ShowDialog() == true)
+                {
+                    tempunion.Name = dialog.ResponseText;
+                }
+
+                var tempchanellist = new List<Chanel>();
+
+                foreach (var union in unions)
+                {
+                    foreach (var chanel in union.Chanels)
+                    {
+                        tempchanellist.Add(chanel);
+                    }
+
+                    Connections.Remove(union);
+                }      
+
+                tempunion.Chanels = tempchanellist.OrderBy(x => x.ConnectionName, new AlphanumComparatorFast()).ToList();
+                Connections.Add(tempunion);
+                ConnectionList.ItemsSource = null;
+                ConnectionList.ItemsSource = Connections;
+
+                var selectedindex = ConnectionList.SelectedIndex;
+
+                SelectedUnion.ItemsSource = null;
+                if (selectedindex != -1)
+                {
+                    SelectedUnion.ItemsSource = Connections.ElementAt(selectedindex).Chanels;
+                }
+                else
+                {
+                    var lastindex = Connections.Count - 1;
+                    SelectedUnion.ItemsSource = Connections.ElementAt(lastindex).Chanels;
+                }
+            }
+        }
+
+        private void BreakClick(object sender, RoutedEventArgs e)
+        {
+            if (!(ConnectionList.SelectedItems.Count > 1))
+            {
+                var union = (ConnectionUnion)ConnectionList.SelectedItem;
+
+                if (union.Chanels.Count > 1) 
+                {
+                    var tempunionlist = new List<ConnectionUnion>();
+
+                    foreach (var chanel in union.Chanels)
+                    {
+                        var tempunion = new ConnectionUnion(chanel.ConnectionName);
+                        tempunion.Chanels.Add(chanel);
+                        tempunion.Type = ConnectionUnion.ConnectionType.Global;
+                        tempunionlist.Add(tempunion);
+                    }
+
+                    Connections.Remove(union);
+
+                    foreach (var tempUnion in tempunionlist)
+                    {
+                        Connections.Add(tempUnion);
+                    }
+
+                    ConnectionList.ItemsSource = null;
+                    ConnectionList.ItemsSource = Connections;
+                }
+            };
+        }
+
+        private void BreakChanelFromList(object sender, RoutedEventArgs e)
+        {
+            var selectedchanels = SelectedUnion.SelectedItems;
+            var selectedunion = (ConnectionUnion)ConnectionList.SelectedItem;
+
+            if (selectedunion.Chanels.Count > 1) 
+            {
+                var tempchanellist = new List<Chanel>();
+
+                foreach (Chanel item in selectedchanels)
+                {
+                    tempchanellist.Add(item);
+                }
+
+                foreach (var chanel in tempchanellist)
+                {
+                    selectedunion.Chanels.Remove(chanel);
+                    var tempunion = new ConnectionUnion(chanel.ConnectionName);
+                    tempunion.Chanels.Add(chanel);
+                    Connections.Add(tempunion);
+                }
+
+                if (selectedunion.Chanels.Count == 0)
+                {
+                    Connections.Remove(selectedunion);
+                }
+
+
+                ConnectionList.ItemsSource = null;
+                ConnectionList.ItemsSource = Connections;
+
+                var selectedindex = ConnectionList.SelectedIndex;
+
+                SelectedUnion.ItemsSource = null;
+                if (selectedindex != -1)
+                {
+                    SelectedUnion.ItemsSource = Connections.ElementAt(selectedindex).Chanels;
+                }
+                else
+                {
+                    var lastindex = Connections.Count - 1;
+                    SelectedUnion.ItemsSource = Connections.ElementAt(lastindex).Chanels;
+                }
+            }
+        }
+
+        private void SelectedUnion_OnSorting(object sender, DataGridSortingEventArgs e)
+        {
+            var args = e;
+            var column = args.Column.SortMemberPath;
+
+            if (column == "ConnectionName" || column == "ChanelName")
+            {
+                args.Handled = true;
+                var selectedunion = (ConnectionUnion)ConnectionList.SelectedItem;
+
+                if (selectedunion != null) 
+                {
+                    if (column == "ConnectionName") 
+                    {
+                        selectedunion.Chanels = selectedunion.Chanels.OrderBy(x => x.ConnectionName, new AlphanumComparatorFast()).ToList();
+                    }
+                    else
+                    {
+                        selectedunion.Chanels = selectedunion.Chanels.OrderBy(x => x.ChanelName, new AlphanumComparatorFast()).ToList();
+                    }
+
+                    SelectedUnion.ItemsSource = null;
+                    SelectedUnion.ItemsSource = Connections.ElementAt(ConnectionList.SelectedIndex).Chanels;
+                }
+            }
+        }
+
+        private void SelectedUnion_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var args = e;
+            var key = args.Key;
+
+            if (SelectedUnion.ItemsSource != null && SelectedUnion.SelectedItem != null) 
+            {
+                var selectedindex = ConnectionList.SelectedIndex;
+                var selectedchanelineIndex = SelectedUnion.SelectedIndex;
+                var selectedchanel = (Chanel) SelectedUnion.SelectedItem;
+                var maxindex = Connections.ElementAt(ConnectionList.SelectedIndex).Chanels.Count - 1;
+
+                if (key == Key.Up && selectedchanelineIndex != 0)
+                {
+                    Connections.ElementAt(selectedindex).Chanels.Remove(selectedchanel);
+                    Connections.ElementAt(selectedindex).Chanels.Insert(selectedchanelineIndex - 1, selectedchanel);
+
+                    SelectedUnion.ItemsSource = null;
+                    SelectedUnion.ItemsSource = Connections.ElementAt(ConnectionList.SelectedIndex).Chanels;
+
+                    SelectedUnion.SelectedItem = SelectedUnion.Items[selectedchanelineIndex];
+                    SelectedUnion.ScrollIntoView(SelectedUnion.Items[selectedchanelineIndex]);
+                    DataGridRow dgrow = (DataGridRow)SelectedUnion.ItemContainerGenerator.ContainerFromItem(SelectedUnion.Items[selectedchanelineIndex]);
+                    dgrow.MoveFocus(new TraversalRequest(FocusNavigationDirection.Up));
+                }
+                if (key == Key.Down && selectedchanelineIndex != maxindex)
+                {
+                    Connections.ElementAt(selectedindex).Chanels.Remove(selectedchanel);
+                    Connections.ElementAt(selectedindex).Chanels.Insert(selectedchanelineIndex + 1, selectedchanel);
+
+                    SelectedUnion.ItemsSource = null;
+                    SelectedUnion.ItemsSource = Connections.ElementAt(ConnectionList.SelectedIndex).Chanels;
+
+                    SelectedUnion.SelectedItem = SelectedUnion.Items[selectedchanelineIndex];
+                    SelectedUnion.ScrollIntoView(SelectedUnion.Items[selectedchanelineIndex]);
+                    DataGridRow dgrow = (DataGridRow)SelectedUnion.ItemContainerGenerator.ContainerFromItem(SelectedUnion.Items[selectedchanelineIndex]);
+                    dgrow.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
+                }
+            }
         }
     }
 }

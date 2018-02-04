@@ -5,43 +5,67 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AltiumParserWPF"
         xmlns:ett="clr-namespace:AltiumParserWPF.Analysis.Ett"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Name="myWindow"
         Title="MainWindow" Height="350" Width="750">
 
     <Grid Margin="10" Name="MainGrid" >
 
-        <ListView Name="ConnectionList" ItemsSource="{Binding}" Margin="0,0,370,50">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding DisplayName}" Width="Auto"/>
-                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" Width="Auto"/>
-                    <GridViewColumn Header="Chanels" DisplayMemberBinding="{Binding Chanels.Count}" Width="Auto"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
 
-        <ListView Name="SelectedUnion" ItemsSource="{Binding}" Margin="370,0,0,50">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ChanelName}"/>
-                    <GridViewColumn Header="Connection" DisplayMemberBinding="{Binding ConnectionName}"/>
-                    <GridViewColumn>
-                        <GridViewColumnHeader>
-                            <TextBlock Text="Connected Objects" Width="350" HorizontalAlignment="Center"/>
-                        </GridViewColumnHeader>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock TextWrapping="Wrap" Text="{Binding Elements}" Width="Auto" HorizontalAlignment="Left"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-            
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <DataGrid Name="ConnectionList" ItemsSource="{Binding}" Margin="0,0,370,50" AutoGenerateColumns="False">
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Объединить" Click="MergeClick"/>
+                    <MenuItem Header="Разбить" Click="BreakClick"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding DisplayName, Mode=OneWay}" Width="Auto"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="Auto"/>
+                <DataGridTextColumn Header="Chanels" Binding="{Binding Chanels.Count, Mode=OneWay}" Width="Auto"/>
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+        <DataGrid Name="SelectedUnion" ItemsSource="{Binding}" Margin="370,0,0,50" AutoGenerateColumns="False" AllowDrop="True" Sorting="SelectedUnion_OnSorting" PreviewKeyDown="SelectedUnion_OnPreviewKeyDown">
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Убрать" Click="BreakChanelFromList"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding ChanelName, Mode=OneWay}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+                            <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Connection" Binding="{Binding ConnectionName, Mode=OneWay}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+                            <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Connected Objects" Binding="{Binding Elements, Mode=OneWay}" Width="Auto">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            <Setter Property="TextBlock.HorizontalAlignment" Value="Stretch"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+
+        </DataGrid>
 
     </Grid>
 </Window>
-
-
