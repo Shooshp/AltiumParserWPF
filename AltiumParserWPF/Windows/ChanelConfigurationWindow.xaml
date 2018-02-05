@@ -1,0 +1,98 @@
+﻿<Window x:Class="AltiumParserWPF.Windows.ChanelConfigurationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AltiumParserWPF.Windows"
+        xmlns:System ="clr-namespace:System;assembly=mscorlib"
+        xmlns:EnumSource ="clr-namespace:AltiumParserWPF.Analysis.Ett"
+        xmlns:analysis="clr-namespace:AltiumParserWPF.Analysis"
+        mc:Ignorable="d"
+        Title="ChanelConfigurationWindow" Height="300" Width="300">
+    
+    <Window.Resources>
+        <ObjectDataProvider x:Key="datafromenum1" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="EnumSource:ConnectionType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="datafromenum2" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="EnumSource:Direction"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="datafromenum3" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="EnumSource:InitialState"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    
+    <Grid Margin="10" Name="MainGrid">
+
+        <DataGrid Name="ConnectionConfiguration" ItemsSource="{Binding}" Margin="0,0,0,50" AutoGenerateColumns="False" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding DisplayName, Mode=OneWay}" Width="Auto"/>
+
+                <DataGridTemplateColumn Header="Type" Width="Auto">
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource datafromenum1}}"
+                                      SelectedItem="{Binding Path=ConnectionType}"
+                                      Height="Auto"
+                                      SelectionChanged="OnTypeChange"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=ConnectionType}" Height="Auto"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Direction" Width="Auto">
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource datafromenum2}}"
+                                      SelectedItem="{Binding Path=Direction}"
+                                      Height="Auto"
+                                      SelectionChanged="OnDirectionChange"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Direction}" Height="Auto"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="InitialState" Width="Auto">
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource datafromenum3}}"
+                                      SelectedItem="{Binding Path=InitialState}"
+                                      Height="Auto"
+                                      SelectionChanged="OnStateChange"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=InitialState}" Height="Auto"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Chanels" Binding="{Binding Chanels.Count, Mode=OneWay}" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <Grid Height="50" VerticalAlignment="Bottom">
+            <Button Content="Назад" Click="BackButtonClick" Width="50" Height="20" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Button Content="Далее" Click="NextButtonClick" Width="50" Height="20" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        </Grid>
+
+    </Grid>
+</Window>

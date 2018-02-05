@@ -3,9 +3,9 @@ using Microsoft.Win32;
 
 namespace AltiumParserWPF
 {
-    public partial class Startup : Window
+    public partial class StartupWindow : Window
     {
-        public Startup()
+        public StartupWindow()
         {
             InitializeComponent();
         }
@@ -21,9 +21,9 @@ namespace AltiumParserWPF
         {
             if (!string.IsNullOrEmpty(FilePathTextBox.Text) && FilePathTextBox.Text.Contains(".SchDoc")) 
             {
-                var fileparser = new MainWindow(FilePathTextBox.Text);
-                fileparser.Show();
-                this.Close();
+                var chanelSelectWindow = new Windows.ChanelSelectWindow(FilePathTextBox.Text, this);
+                chanelSelectWindow.Show();
+                Hide();
             }
         }
     }

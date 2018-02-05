@@ -10,7 +10,64 @@ namespace AltiumParserWPF.Analysis.Ett
     {
         public string Name;
         public List<Chanel> Chanels { get; set; }
-        public ConnectionType Type { get; set; }
+        private ConnectionType type;
+        private Direction direction;
+        private InitialState initialstate;
+
+        public ConnectionType ConnectionType
+        {
+            get { return type; }
+            set { type = value; }
+        }
+
+        public Direction Direction
+        {
+            get { return direction; }
+            set
+            {
+                direction = value;
+
+                if (direction == Direction.In)
+                {
+                    initialstate = InitialState.HiZ;
+                }
+                else
+                {
+                    initialstate = InitialState.Na;
+                }
+            }
+        }
+
+        public InitialState InitialState
+        {
+            get { return initialstate; }
+            set
+            {
+                var state = value;
+                if (direction != Direction.Na)
+                {
+                    if (direction == Direction.In)
+                    {
+                        initialstate = InitialState.HiZ;
+                    }
+                    else
+                    {
+                        if (state == InitialState.HiZ)
+                        {
+                            initialstate = InitialState.Na;
+                        }
+                        else
+                        {
+                            initialstate = state;
+                        }
+                    }
+                }
+                else
+                {
+                    initialstate = InitialState.Na;
+                }
+            }
+        }
 
         public string DisplayName
         {
@@ -32,21 +89,13 @@ namespace AltiumParserWPF.Analysis.Ett
         {
             Name = name;
             Chanels = new List<Chanel>();
+            direction = Direction.Na;
+            initialstate = InitialState.Na;
         }
 
         public void Add(Chanel chanel)
         {
             Chanels.Add(chanel);
-        }
-
-        public enum ConnectionType
-        {
-            [Description("Array")]
-            Array,
-            [Description("Bus")]
-            Bus,
-            [Description("Global")]
-            Global
         }
 
         public override string ToString()
@@ -83,5 +132,39 @@ namespace AltiumParserWPF.Analysis.Ett
 
             return line;
         }
+    }
+
+    public enum ConnectionType
+    {
+        [Description("Array")]
+        Array,
+        [Description("Bus")]
+        Bus,
+        [Description("Global")]
+        Global
+    }
+
+    public enum Direction
+    {
+        [Description("In")]
+        In,
+        [Description("Out")]
+        Out,
+        [Description("Bidir")]
+        Bidir,
+        [Description("Unknown")]
+        Na
+    }
+
+    public enum InitialState
+    {
+        [Description("Low")]
+        Low,
+        [Description("High")]
+        High,
+        [Description("HiZ")]
+        HiZ,
+        [Description("Unknown")]
+        Na
     }
 }

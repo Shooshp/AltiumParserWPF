@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,18 +9,22 @@ using System.Windows.Input;
 using AltiumParserWPF.Analysis;
 using AltiumParserWPF.Analysis.Ett;
 
-namespace AltiumParserWPF
+namespace AltiumParserWPF.Windows
 {
-    public partial class MainWindow
+    public partial class ChanelSelectWindow
     {
         public List<ConnectionUnion> Connections { get; set; }
+        private Window _startupWindow;
+        private bool _codeclosing;
 
-        public MainWindow(string path)
+        public ChanelSelectWindow(string path, Window startupWindow)
         {
+            _codeclosing = false;
+            _startupWindow = startupWindow;
             Connections = new List<ConnectionUnion>();
             InitializeComponent();
 
-            myWindow.SizeChanged += MyWindowOnSizeChanged;
+            MyWindow.SizeChanged += MyWindowOnSizeChanged;
 
             var parser = new AltiumParser.AltiumParser(path);
             var type = PcbAnalysis.GetPsbType(parser);
@@ -35,8 +41,7 @@ namespace AltiumParserWPF
             {
                 Console.WriteLine(connection);
             }
-
-
+            
             ConnectionList.ItemsSource = Connections;
             ConnectionList.SelectionChanged += ConnectionListOnSelectionChanged;
         }
@@ -129,7 +134,7 @@ namespace AltiumParserWPF
                     {
                         var tempunion = new ConnectionUnion(chanel.ConnectionName);
                         tempunion.Chanels.Add(chanel);
-                        tempunion.Type = ConnectionUnion.ConnectionType.Global;
+                        tempunion.ConnectionType = ConnectionType.Global;
                         tempunionlist.Add(tempunion);
                     }
 
@@ -143,7 +148,7 @@ namespace AltiumParserWPF
                     ConnectionList.ItemsSource = null;
                     ConnectionList.ItemsSource = Connections;
                 }
-            };
+            }
         }
 
         private void BreakChanelFromList(object sender, RoutedEventArgs e)
@@ -257,6 +262,40 @@ namespace AltiumParserWPF
                     DataGridRow dgrow = (DataGridRow)SelectedUnion.ItemContainerGenerator.ContainerFromItem(SelectedUnion.Items[selectedchanelineIndex]);
                     dgrow.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
                 }
+            }
+        }
+
+        private void CancelButtonClick(object sender, RoutedEventArgs e)
+        {
+            _startupWindow.Show();
+            _codeclosing = true;
+            Close();
+        }
+
+        private void NextButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (Connections.Count != 0) 
+            {
+                var chanelConfigurationWindow =
+                    new ChanelConfigurationWindow(Connections, this)
+                    {
+                        WindowStartupLocation = WindowStartupLocation.Manual,
+                        Left = Left,
+                        Top = Top,
+                        Width = ActualWidth,
+                        Height = ActualHeight
+                    };
+                chanelConfigurationWindow.Show();
+                Hide();
+            }
+            
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (!_codeclosing)
+            {
+                Application.Current.Shutdown();
             }
         }
     }

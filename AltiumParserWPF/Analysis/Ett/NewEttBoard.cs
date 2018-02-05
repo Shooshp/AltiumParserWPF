@@ -123,11 +123,11 @@ namespace AltiumParserWPF.Analysis.Ett
             {
                 if (connectionUnion.Chanels.Count == 1)
                 {
-                    connectionUnion.Type = ConnectionUnion.ConnectionType.Global;
+                    connectionUnion.ConnectionType = ConnectionType.Global;
                 }
                 else
                 {
-                    connectionUnion.Type = ConnectionUnion.ConnectionType.Array;
+                    connectionUnion.ConnectionType = ConnectionType.Array;
                 }
             }
 

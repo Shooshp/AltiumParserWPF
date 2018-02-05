@@ -91,10 +91,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Startup.xaml.cs">
-      <DependentUpon>Startup.xaml</DependentUpon>
+    <Compile Include="Windows\ChanelConfigurationWindow.xaml.cs">
+      <DependentUpon>ChanelConfigurationWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Windows\StartupWindow.xaml.cs">
+      <DependentUpon>StartupWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Windows\ChanelConfigurationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ChanelSelectWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -125,15 +132,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Windows\ChanelSelectWindow.xaml.cs">
+      <DependentUpon>ChanelSelectWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Popups\PopupDialog.xaml">
+    <Page Include="Windows\Popups\PopupDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Startup.xaml">
+    <Page Include="Windows\StartupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -141,7 +148,7 @@
   <ItemGroup>
     <Compile Include="Analysis\Ett\NewEttBoard.cs" />
     <Compile Include="Analysis\PcbAnalysis.cs" />
-    <Compile Include="Popups\PopupDialog.xaml.cs">
+    <Compile Include="Windows\Popups\PopupDialog.xaml.cs">
       <DependentUpon>PopupDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
