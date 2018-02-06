@@ -42,7 +42,8 @@
                             <ComboBox ItemsSource="{Binding Source={StaticResource datafromenum1}}"
                                       SelectedItem="{Binding Path=ConnectionType}"
                                       Height="Auto"
-                                      SelectionChanged="OnTypeChange"/>
+                                      SelectionChanged="OnTypeChange">
+                            </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                     <DataGridTemplateColumn.CellTemplate>

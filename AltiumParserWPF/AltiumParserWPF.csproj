@@ -91,8 +91,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Analysis\Ett\CodeMaker\EttFunctions.cs" />
+    <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeBlock.cs" />
+    <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeTemplateArray.cs" />
+    <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeTemplateClass.cs" />
+    <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeTemplateFor.cs" />
+    <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeTemplateFunction.cs" />
+    <Compile Include="Analysis\Ett\CodeMaker\Templates\HeaderTemplate.cs" />
+    <Compile Include="Analysis\Ett\EttPostProcessor.cs" />
     <Compile Include="Windows\ChanelConfigurationWindow.xaml.cs">
       <DependentUpon>ChanelConfigurationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EttOutputWindow.xaml.cs">
+      <DependentUpon>EttOutputWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\StartupWindow.xaml.cs">
       <DependentUpon>StartupWindow.xaml</DependentUpon>
@@ -136,6 +147,10 @@
       <DependentUpon>ChanelSelectWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\EttOutputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\Popups\PopupDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

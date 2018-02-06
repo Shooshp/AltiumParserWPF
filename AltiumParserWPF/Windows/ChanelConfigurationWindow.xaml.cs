@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using AltiumParserWPF.Analysis.Ett;
@@ -13,14 +11,21 @@ namespace AltiumParserWPF.Windows
         public List<ConnectionUnion> Unions;
         private Window _parentWindow;
         private bool _codeclosing;
-        public List<string> ChanelTypes;
+
 
         public ChanelConfigurationWindow(List<ConnectionUnion> unions, Window parentwindow)
         {
-            ChanelTypes = new List<string>();
             _codeclosing = false;
             _parentWindow = parentwindow;
             Unions = unions;
+
+            foreach (var union in Unions)
+            {
+                if (union.Chanels.Count == 1)
+                {
+                    union.ConnectionType = ConnectionType.Global;
+                }
+            }
             
             InitializeComponent();
 
@@ -36,7 +41,30 @@ namespace AltiumParserWPF.Windows
 
         private void NextButtonClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var error = false;
+
+            foreach (var union in Unions)
+            {
+                if (union.Direction == Direction.Na || union.InitialState == InitialState.Na)
+                {
+                    error = true;
+                }
+            }
+
+            if (!error)
+            {
+                var ettoutputwindow =
+                    new EttOutputWindow(Unions, this)
+                    {
+                        WindowStartupLocation = WindowStartupLocation.Manual,
+                        Left = Left,
+                        Top = Top,
+                        Width = ActualWidth,
+                        Height = ActualHeight
+                    };
+                ettoutputwindow.Show();
+                Hide();
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -65,12 +93,34 @@ namespace AltiumParserWPF.Windows
 
         private void OnDirectionChange(object sender, SelectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            var selectedunion = (ConnectionUnion)ConnectionConfiguration.SelectedItem;
+
+            var args = (ComboBox)e.Source;
+            var newDirection = (Direction)args.SelectedItem;
+            var currentdirection = selectedunion.Direction;
+
+            if (newDirection != currentdirection)
+            {
+                selectedunion.Direction = newDirection;
+                ConnectionConfiguration.ItemsSource = null;
+                ConnectionConfiguration.ItemsSource = Unions;
+            }
         }
 
         private void OnStateChange(object sender, SelectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            var selectedunion = (ConnectionUnion)ConnectionConfiguration.SelectedItem;
+
+            var args = (ComboBox)e.Source;
+            var newInitialState = (InitialState)args.SelectedItem;
+            var currentInitialState = selectedunion.InitialState;
+
+            if (newInitialState != currentInitialState)
+            {
+                selectedunion.InitialState = newInitialState;
+                ConnectionConfiguration.ItemsSource = null;
+                ConnectionConfiguration.ItemsSource = Unions;
+            }
         }
     } 
 }

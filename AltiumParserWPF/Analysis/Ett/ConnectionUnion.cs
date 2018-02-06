@@ -52,13 +52,20 @@ namespace AltiumParserWPF.Analysis.Ett
                     }
                     else
                     {
-                        if (state == InitialState.HiZ)
+                        if (direction == Direction.Bidir)
                         {
-                            initialstate = InitialState.Na;
+                            initialstate = state;
                         }
                         else
                         {
-                            initialstate = state;
+                            if (state == InitialState.HiZ)
+                            {
+                                initialstate = InitialState.Na;
+                            }
+                            else
+                            {
+                                initialstate = state;
+                            }
                         }
                     }
                 }
@@ -131,6 +138,29 @@ namespace AltiumParserWPF.Analysis.Ett
             }
 
             return line;
+        }
+
+        public string GetDataType()
+        {
+            var vartype = "";
+
+            if (Chanels.Count < 9)
+            {
+                vartype = "u8";
+            }
+            else
+            {
+                if (Chanels.Count < 17)
+                {
+                    vartype = "u16";
+                }
+                else
+                {
+                    vartype = "u32";
+                }
+            }
+
+            return vartype;
         }
     }
 

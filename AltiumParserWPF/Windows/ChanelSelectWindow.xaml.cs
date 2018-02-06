@@ -111,11 +111,13 @@ namespace AltiumParserWPF.Windows
                 if (selectedindex != -1)
                 {
                     SelectedUnion.ItemsSource = Connections.ElementAt(selectedindex).Chanels;
+                    ConnectionList.SelectedIndex = selectedindex;
                 }
                 else
                 {
                     var lastindex = Connections.Count - 1;
                     SelectedUnion.ItemsSource = Connections.ElementAt(lastindex).Chanels;
+                    ConnectionList.SelectedIndex = lastindex;
                 }
             }
         }
