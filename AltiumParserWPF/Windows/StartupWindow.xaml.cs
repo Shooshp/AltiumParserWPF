@@ -3,7 +3,7 @@ using Microsoft.Win32;
 
 namespace AltiumParserWPF
 {
-    public partial class StartupWindow : Window
+    public partial class StartupWindow
     {
         public StartupWindow()
         {

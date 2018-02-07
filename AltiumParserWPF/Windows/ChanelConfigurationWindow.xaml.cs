@@ -6,7 +6,7 @@ using AltiumParserWPF.Analysis.Ett;
 
 namespace AltiumParserWPF.Windows
 {
-    public partial class ChanelConfigurationWindow : Window
+    public partial class ChanelConfigurationWindow
     {
         public List<ConnectionUnion> Unions;
         private Window _parentWindow;

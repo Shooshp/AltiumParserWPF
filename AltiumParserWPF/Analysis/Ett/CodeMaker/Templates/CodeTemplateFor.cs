@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AltiumParserWPF.Analysis.Ett.CodeMaker
+namespace AltiumParserWPF.Analysis.Ett.CodeMaker.Templates
 {
     public class CodeTemplateFor : CodeBlock
     {
@@ -8,7 +8,7 @@ namespace AltiumParserWPF.Analysis.Ett.CodeMaker
         {
             var title = "for(u8 " + itteratorname + "=0; " + itteratorname + "<" + maxlimit + "; " + itteratorname +
                         "++)";
-            AddCode(code, title);
+            AddCode(code, title, false);
         }
     }
 }

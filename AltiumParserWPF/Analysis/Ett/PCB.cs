@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using AltiumParserWPF.Analysis.Ett;
+﻿using System.Collections.Generic;
 
-namespace AltiumParserWPF.Analysis
+namespace AltiumParserWPF.Analysis.Ett
 {
     public abstract class PCB
     {

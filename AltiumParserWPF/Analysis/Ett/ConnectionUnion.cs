@@ -10,14 +10,14 @@ namespace AltiumParserWPF.Analysis.Ett
     {
         public string Name;
         public List<Chanel> Chanels { get; set; }
-        private ConnectionType type;
+        private ConnectionType _type;
         private Direction direction;
         private InitialState initialstate;
 
         public ConnectionType ConnectionType
         {
-            get { return type; }
-            set { type = value; }
+            get { return _type; }
+            set { _type = value; }
         }
 
         public Direction Direction
@@ -142,7 +142,7 @@ namespace AltiumParserWPF.Analysis.Ett
 
         public string GetDataType()
         {
-            var vartype = "";
+            string vartype;
 
             if (Chanels.Count < 9)
             {

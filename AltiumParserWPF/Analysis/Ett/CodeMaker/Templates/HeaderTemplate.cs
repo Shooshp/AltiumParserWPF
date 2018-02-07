@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AltiumParserWPF.Analysis.Ett.CodeMaker
+namespace AltiumParserWPF.Analysis.Ett.CodeMaker.Templates
 {
     public class HeaderTemplate
     {
@@ -21,6 +21,11 @@ namespace AltiumParserWPF.Analysis.Ett.CodeMaker
         }
 
         public void AddDefine(string name, string value)
+        {
+            Code.Add("#define " + name + " " + value);
+        }
+
+        public void AddDefine(string name, int value)
         {
             Code.Add("#define " + name + " " + value);
         }
@@ -51,12 +56,17 @@ namespace AltiumParserWPF.Analysis.Ett.CodeMaker
             {
                 line += include;
             }
-            Code.Add(include);
+            Code.Add(line);
         }
 
         public void AddBlankLine()
         {
             Code.Add("");
+        }
+
+        public void CloseHeader()
+        {
+            Endif();
         }
     }
 }

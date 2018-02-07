@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AltiumParserWPF.Analysis.Ett.CodeMaker
+namespace AltiumParserWPF.Analysis.Ett.CodeMaker.Templates
 {
     public class CodeTemplateArray : CodeBlock
     {
@@ -28,7 +28,7 @@ namespace AltiumParserWPF.Analysis.Ett.CodeMaker
                 tempLines.Add(templine);
             }
 
-            AddCode(tempLines, title);
+            AddCode(tempLines, title, false);
         }
     }
 }

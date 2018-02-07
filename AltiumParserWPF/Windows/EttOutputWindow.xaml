@@ -4,9 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AltiumParserWPF.Windows"
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
         mc:Ignorable="d"
         Title="EttOutputWindow" Height="300" Width="300">
-    <Grid>
-        
+    <Grid Margin="10">
+
+        <avalonedit:TextEditor Name="Editor" FontFamily="Consolas" SyntaxHighlighting="Cpp" FontSize="10pt" Margin="0,0,0,50"></avalonedit:TextEditor>
+
+
+        <Grid Height="50" VerticalAlignment="Bottom">
+            <Button Content="Назад" Click="BackButtonClick" Width="50" Height="20" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        </Grid>
     </Grid>
 </Window>

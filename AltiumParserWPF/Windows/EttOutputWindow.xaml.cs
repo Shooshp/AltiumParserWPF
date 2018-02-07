@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using AltiumParserWPF.Analysis.CodeEditor;
 using AltiumParserWPF.Analysis.Ett;
+using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Folding;
 
 namespace AltiumParserWPF.Windows
 {
-    public partial class EttOutputWindow : Window
+    public partial class EttOutputWindow
     {
         public List<ConnectionUnion> Unions;
         private Window _parentWindow;
@@ -27,9 +20,33 @@ namespace AltiumParserWPF.Windows
             _parentWindow = parentwindow;
             Unions = unions;
 
-            var result = new EttPostProcessor(Unions);
+            var result = new EttOutputCommon(Unions);
+            
+            var doc = new TextDocument();
+            var container = "";
 
+            foreach (var line in result.Header.Code)
+            {
+                if (line.Contains("\n"))
+                {
+                    container += line;
+                }
+                else
+                {
+                    container += line + "\n";
+                }
+            }
+
+            doc.Text = container;
+            doc.FileName = result.Header.Name + ".h";
             InitializeComponent();
+
+            Editor.SyntaxHighlighting = ResourceLoader.LoadHighlightingDefinition("CustomSyntaxDefinitionCpp.xshd");
+            Editor.Document = doc;
+            Editor.ShowLineNumbers = true;
+            var foldingManager = FoldingManager.Install(Editor.TextArea);
+            var foldingStrategy = new BraceFoldingStrategy();
+            foldingStrategy.UpdateFoldings(foldingManager, Editor.Document);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -38,6 +55,11 @@ namespace AltiumParserWPF.Windows
             {
                 Application.Current.Shutdown();
             }
+        }
+
+        private void BackButtonClick(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

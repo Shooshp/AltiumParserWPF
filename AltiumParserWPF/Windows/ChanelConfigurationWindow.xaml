@@ -11,19 +11,19 @@
         Title="ChanelConfigurationWindow" Height="300" Width="300">
     
     <Window.Resources>
-        <ObjectDataProvider x:Key="datafromenum1" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+        <ObjectDataProvider x:Key="Datafromenum1" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="EnumSource:ConnectionType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
-        <ObjectDataProvider x:Key="datafromenum2" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+        <ObjectDataProvider x:Key="Datafromenum2" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="EnumSource:Direction"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
-        <ObjectDataProvider x:Key="datafromenum3" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+        <ObjectDataProvider x:Key="Datafromenum3" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="EnumSource:InitialState"/>
             </ObjectDataProvider.MethodParameters>
@@ -39,7 +39,7 @@
                 <DataGridTemplateColumn Header="Type" Width="Auto">
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding Source={StaticResource datafromenum1}}"
+                            <ComboBox ItemsSource="{Binding Source={StaticResource Datafromenum1}}"
                                       SelectedItem="{Binding Path=ConnectionType}"
                                       Height="Auto"
                                       SelectionChanged="OnTypeChange">
@@ -56,7 +56,7 @@
                 <DataGridTemplateColumn Header="Direction" Width="Auto">
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding Source={StaticResource datafromenum2}}"
+                            <ComboBox ItemsSource="{Binding Source={StaticResource Datafromenum2}}"
                                       SelectedItem="{Binding Path=Direction}"
                                       Height="Auto"
                                       SelectionChanged="OnDirectionChange"/>
@@ -72,7 +72,7 @@
                 <DataGridTemplateColumn Header="InitialState" Width="Auto">
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding Source={StaticResource datafromenum3}}"
+                            <ComboBox ItemsSource="{Binding Source={StaticResource Datafromenum3}}"
                                       SelectedItem="{Binding Path=InitialState}"
                                       Height="Auto"
                                       SelectionChanged="OnStateChange"/>
