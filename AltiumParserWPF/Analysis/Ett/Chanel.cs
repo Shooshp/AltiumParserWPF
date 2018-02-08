@@ -44,5 +44,7 @@ namespace AltiumParserWPF.Analysis.Ett
             ConnectionName = connection;
             ConnectedObjects = new List<string>();
         }
+
+
     }
 }

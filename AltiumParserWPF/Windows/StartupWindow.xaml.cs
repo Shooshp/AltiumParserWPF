@@ -19,9 +19,10 @@ namespace AltiumParserWPF
 
         private void OkButtonClick(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(FilePathTextBox.Text) && FilePathTextBox.Text.Contains(".SchDoc")) 
+            var path = FilePathTextBox.Text;
+            if (!string.IsNullOrEmpty(path) && path.Contains(".SchDoc")) 
             {
-                var chanelSelectWindow = new Windows.ChanelSelectWindow(FilePathTextBox.Text, this);
+                var chanelSelectWindow = new Windows.ChanelSelectWindow(path, this);
                 chanelSelectWindow.Show();
                 Hide();
             }

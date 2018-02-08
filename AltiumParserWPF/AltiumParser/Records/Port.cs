@@ -4,11 +4,12 @@ using System.Globalization;
 
 namespace AltiumParserWPF.AltiumParser.Records
 {
-    [DebuggerDisplay("Port: {Name}")]
+    [DebuggerDisplay("Port: {Name} Srtyle: {Style}")]
     public class Port : Record
     {
         public int IndexInSheet;
         public int OwnerpartId;
+        public int Style;
         public int Alignment;
         public int Width;
         public int Width_Frac;
@@ -22,7 +23,11 @@ namespace AltiumParserWPF.AltiumParser.Records
         public string UniqueId;
         public int Height;
         public List<Dot> ConnectionsDots;
-        public float XOffset;
+
+        public float Offset;
+        public Dot FirstDot;
+        public Dot SecondDot;
+
 
         public Port(string record)
         {
@@ -36,13 +41,22 @@ namespace AltiumParserWPF.AltiumParser.Records
 
             var temp = Width + "." + Width_Frac;
 
-            XOffset = float.Parse(temp, CultureInfo.InvariantCulture.NumberFormat);
+            Offset = float.Parse(temp, CultureInfo.InvariantCulture.NumberFormat);
 
-            var FirstDot = new Dot(Location_X, Location_X_Frac, Location_Y, Location_Y_Frac);
-            var SecondDot = new Dot(FirstDot.X + XOffset, FirstDot.Y);
+            FirstDot = new Dot(Location_X, Location_X_Frac, Location_Y, Location_Y_Frac);
+
+            if (Style == 0 || Style == 1 || Style == 2 || Style == 3 )
+            {
+                SecondDot = new Dot(FirstDot.X + Offset, FirstDot.Y);
+            }
+
+            if (Style == 4 || Style == 5 || Style == 6 || Style == 7)
+            {
+                SecondDot = new Dot(FirstDot.X, FirstDot.Y + Offset);
+            }
             
             ConnectionsDots.Add(FirstDot);
             ConnectionsDots.Add(SecondDot);
-        }
+        } 
     }
 }

@@ -286,13 +286,16 @@ namespace AltiumParserWPF.AltiumParser
             {
                 var subpartpath = path + sheetSymbol.SheetFile.Text;
 
-                if (!SubParts.Exists(x=>x.SubParser.FilePath == subpartpath))
+                if (subpartpath.Contains(".SchDoc"))
                 {
-                    SubParts.Add(new SubPart(subpartpath, sheetSymbol.SheetName.Text));
-                }
-                else
-                {
-                    SubParts.Single(x=> x.SubParser.FilePath == subpartpath).Names.Add(sheetSymbol.SheetName.Text);
+                    if (!SubParts.Exists(x => x.SubParser.FilePath == subpartpath))
+                    {
+                        SubParts.Add(new SubPart(subpartpath, sheetSymbol.SheetName.Text));
+                    }
+                    else
+                    {
+                        SubParts.Single(x => x.SubParser.FilePath == subpartpath).Names.Add(sheetSymbol.SheetName.Text);
+                    }
                 }
             }
         }

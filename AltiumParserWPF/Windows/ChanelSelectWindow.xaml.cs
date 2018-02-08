@@ -28,12 +28,20 @@ namespace AltiumParserWPF.Windows
             var parser = new AltiumParser.AltiumParser(path);
             var type = PcbAnalysis.GetPsbType(parser);
 
+
+            PCB pcb;
+
             switch (type)
             {
                 case PcbAnalysis.PcbTypes.EttNew:
-                    var pcb = new NewEttBoard(parser);
+                    pcb = new NewEttBoard(parser);
                     Connections = pcb.Connections;
                     break;
+
+                case PcbAnalysis.PcbTypes.EttOld:
+                    pcb = new OldEttBoard(parser);
+                    Connections = pcb.Connections;
+                    break;  
             }
 
             foreach (var connection in Connections)

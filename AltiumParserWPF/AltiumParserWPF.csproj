@@ -109,6 +109,7 @@
     <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeTemplateFor.cs" />
     <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeTemplateFunction.cs" />
     <Compile Include="Analysis\Ett\CodeMaker\Templates\HeaderTemplate.cs" />
+    <Compile Include="Analysis\Ett\OldEttBoard.cs" />
     <Compile Include="Analysis\Ett\OutputConverters\EttOutputCommon.cs" />
     <Compile Include="Analysis\Ett\OutputConverters\EttOutputOlegStyle.cs" />
     <Compile Include="Analysis\Ett\OutputConverters\EttOutputTemplate.cs" />
