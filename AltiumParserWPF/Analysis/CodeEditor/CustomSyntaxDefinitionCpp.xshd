@@ -100,6 +100,9 @@
       <Word>static</Word>
     </Keywords>
     <Keywords color="TypeKeywords">
+      <Word>pin</Word>
+      <Word>pins</Word>
+      <Word>port</Word>
       <Word>u8</Word>
       <Word>u16</Word>
       <Word>u32</Word>
@@ -145,6 +148,10 @@
       <Word>default</Word>
     </Keywords>
     <Keywords color="Keywords">
+      <Word>OUT</Word>
+      <Word>LO</Word>
+      <Word>HI</Word>
+      <Word>INP</Word>
       <Word>asm</Word>
       <Word>auto</Word>
       <Word>compl</Word>

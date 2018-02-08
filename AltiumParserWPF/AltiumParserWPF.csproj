@@ -69,8 +69,14 @@
     <Reference Include="Fastenshtein, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fastenshtein.1.0.0.4\lib\net40-client\Fastenshtein.dll</HintPath>
     </Reference>
+    <Reference Include="FirstFloor.ModernUI, Version=1.0.9.0, Culture=neutral, PublicKeyToken=bc9b0c37bf06c6a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\ModernUI.WPF.1.0.9\lib\net40\FirstFloor.ModernUI.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonEdit.5.0.4\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Windows.Shell, Version=3.5.41019.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\ModernUI.WPF.1.0.9\lib\net40\Microsoft.Windows.Shell.dll</HintPath>
     </Reference>
     <Reference Include="OpenMcdf, Version=2.1.3.34730, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenMcdf.2.1.3.34730\lib\OpenMcdf.dll</HintPath>
@@ -103,7 +109,9 @@
     <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeTemplateFor.cs" />
     <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeTemplateFunction.cs" />
     <Compile Include="Analysis\Ett\CodeMaker\Templates\HeaderTemplate.cs" />
-    <Compile Include="Analysis\Ett\EttOutputCommon.cs" />
+    <Compile Include="Analysis\Ett\OutputConverters\EttOutputCommon.cs" />
+    <Compile Include="Analysis\Ett\OutputConverters\EttOutputOlegStyle.cs" />
+    <Compile Include="Analysis\Ett\OutputConverters\EttOutputTemplate.cs" />
     <Compile Include="Windows\ChanelConfigurationWindow.xaml.cs">
       <DependentUpon>ChanelConfigurationWindow.xaml</DependentUpon>
     </Compile>

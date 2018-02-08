@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AltiumParserWPF"
         mc:Ignorable="d"
-        Title="StartupWindow" Height="120" Width="300" ResizeMode="NoResize">
+        Title="StartupWindow" Height="150" Width="300" ResizeMode="NoResize">
     <Grid>
 
         <Grid Margin="10" >
             <TextBlock Name="Title" Text="Выберите файл печатной платы" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <TextBox x:Name="FilePathTextBox" Height="20" Margin="0,0,51,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="Auto" BorderBrush="Black"/>
-            <Button Content="Browse" Click="BrowseButtonClick" Height="20" Width="50" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox x:Name="FilePathTextBox" Height="25" Margin="0,0,76,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="Auto" BorderBrush="Black"/>
+            <Button Content="Browse" Click="BrowseButtonClick" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             <Button Content="Ok" Click="OkButtonClick" Width="50" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
         </Grid>
 

@@ -8,7 +8,7 @@
         xmlns:EnumSource ="clr-namespace:AltiumParserWPF.Analysis.Ett"
         xmlns:analysis="clr-namespace:AltiumParserWPF.Analysis"
         mc:Ignorable="d"
-        Title="ChanelConfigurationWindow" Height="300" Width="300">
+        Title="ChanelConfigurationWindow" Height="300" Width="500">
     
     <Window.Resources>
         <ObjectDataProvider x:Key="Datafromenum1" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
@@ -91,8 +91,8 @@
 
 
         <Grid Height="50" VerticalAlignment="Bottom">
-            <Button Content="Назад" Click="BackButtonClick" Width="50" Height="20" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Далее" Click="NextButtonClick" Width="50" Height="20" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <Button Content="Назад" Click="BackButtonClick" Width="75" Height="30" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Button Content="Далее" Click="NextButtonClick" Width="75" Height="30" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         </Grid>
 
     </Grid>

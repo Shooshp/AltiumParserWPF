@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
+﻿using System.Collections.Generic;
 using AltiumParserWPF.Analysis.Ett.CodeMaker;
 using AltiumParserWPF.Analysis.Ett.CodeMaker.Templates;
 
-namespace AltiumParserWPF.Analysis.Ett
+namespace AltiumParserWPF.Analysis.Ett.OutputConverters
 {
-    public class EttOutputCommon
+    public class EttOutputCommon : EttOutputTemplate
     {
-        public List<ConnectionUnion> Unions;
         public List<EttFunctions> Functions;
         public HeaderTemplate Header;
 
@@ -18,6 +15,8 @@ namespace AltiumParserWPF.Analysis.Ett
             Functions = new List<EttFunctions>();
             Header = new HeaderTemplate("ProcessFK");
             Unions = unions;
+
+            Name = Header.Name + ".h";
 
             foreach (var union in Unions)
             {
@@ -83,6 +82,7 @@ namespace AltiumParserWPF.Analysis.Ett
 
             Header.Code.AddRange(workingclass.Code);
             Header.CloseHeader();
+            CombineList(Header.Code);
         }
     }
 }

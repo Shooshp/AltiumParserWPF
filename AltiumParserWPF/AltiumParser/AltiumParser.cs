@@ -41,12 +41,12 @@ namespace AltiumParserWPF.AltiumParser
             var file = new CompoundFile(FilePath);
 
             var mainStream = file.RootStorage.GetStream("FileHeader");
-            var storageStream = file.RootStorage.GetStream("Storage");
-            var additionalStream = file.RootStorage.GetStream("Additional");
+            //var storageStream = file.RootStorage.GetStream("Storage");
+           // var additionalStream = file.RootStorage.GetStream("Additional");
 
             var fileHeader = Encoding.Default.GetString(mainStream.GetData());
-            var additional = Encoding.Default.GetString(additionalStream.GetData());
-            var storage = Encoding.Default.GetString(storageStream.GetData());
+            //var additional = Encoding.Default.GetString(additionalStream.GetData());
+            //var storage = Encoding.Default.GetString(storageStream.GetData());
 
             file.Close();
 

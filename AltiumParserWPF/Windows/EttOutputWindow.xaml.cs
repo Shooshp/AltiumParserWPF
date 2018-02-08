@@ -3,12 +3,13 @@ using System.ComponentModel;
 using System.Windows;
 using AltiumParserWPF.Analysis.CodeEditor;
 using AltiumParserWPF.Analysis.Ett;
+using AltiumParserWPF.Analysis.Ett.OutputConverters;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Folding;
 
 namespace AltiumParserWPF.Windows
 {
-    public partial class EttOutputWindow
+    public partial class EttOutputWindow 
     {
         public List<ConnectionUnion> Unions;
         private Window _parentWindow;
@@ -20,25 +21,13 @@ namespace AltiumParserWPF.Windows
             _parentWindow = parentwindow;
             Unions = unions;
 
-            var result = new EttOutputCommon(Unions);
-            
+            //var result = new EttOutputCommon(Unions);
+            var result = new EttOutputOlegStyle(Unions);
             var doc = new TextDocument();
-            var container = "";
 
-            foreach (var line in result.Header.Code)
-            {
-                if (line.Contains("\n"))
-                {
-                    container += line;
-                }
-                else
-                {
-                    container += line + "\n";
-                }
-            }
 
-            doc.Text = container;
-            doc.FileName = result.Header.Name + ".h";
+            doc.Text = result.Container;
+            doc.FileName = result.Name;
             InitializeComponent();
 
             Editor.SyntaxHighlighting = ResourceLoader.LoadHighlightingDefinition("CustomSyntaxDefinitionCpp.xshd");
