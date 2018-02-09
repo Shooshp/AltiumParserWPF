@@ -13,7 +13,7 @@
     <Grid Margin="10" Name="MainGrid" >
 
 
-        <DataGrid Name="ConnectionList" ItemsSource="{Binding}" Margin="0,0,370,50" AutoGenerateColumns="False">
+        <DataGrid Name="ConnectionList" ItemsSource="{Binding}" Margin="0,0,370,50" AutoGenerateColumns="False" Sorting="ConnectionList_OnSorting">
 
             <DataGrid.ContextMenu>
                 <ContextMenu>

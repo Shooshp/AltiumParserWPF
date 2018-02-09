@@ -109,10 +109,13 @@
     <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeTemplateFor.cs" />
     <Compile Include="Analysis\Ett\CodeMaker\Templates\CodeTemplateFunction.cs" />
     <Compile Include="Analysis\Ett\CodeMaker\Templates\HeaderTemplate.cs" />
+    <Compile Include="Analysis\Ett\EttChanelMap.cs" />
     <Compile Include="Analysis\Ett\OldEttBoard.cs" />
     <Compile Include="Analysis\Ett\OutputConverters\EttOutputCommon.cs" />
     <Compile Include="Analysis\Ett\OutputConverters\EttOutputOlegStyle.cs" />
     <Compile Include="Analysis\Ett\OutputConverters\EttOutputTemplate.cs" />
+    <Compile Include="Analysis\F2K\NewF2KBoard.cs" />
+    <Compile Include="Analysis\TextAnalysis.cs" />
     <Compile Include="Windows\ChanelConfigurationWindow.xaml.cs">
       <DependentUpon>ChanelConfigurationWindow.xaml</DependentUpon>
     </Compile>
@@ -149,10 +152,10 @@
     <Compile Include="AltiumParser\Records\SheetSymbol.cs" />
     <Compile Include="AltiumParser\Records\Wire.cs" />
     <Compile Include="AltiumParser\SubPart.cs" />
-    <Compile Include="Analysis\Ett\Chanel.cs" />
+    <Compile Include="Analysis\Chanel.cs" />
     <Compile Include="Analysis\Ett\ConnectionUnion.cs" />
     <Compile Include="Analysis\Ett\DUT.cs" />
-    <Compile Include="Analysis\Ett\PCB.cs" />
+    <Compile Include="Analysis\PCB.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -176,7 +179,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\Ett\NewEttBoard.cs" />
-    <Compile Include="Analysis\PcbAnalysis.cs" />
     <Compile Include="Windows\Popups\PopupDialog.xaml.cs">
       <DependentUpon>PopupDialog.xaml</DependentUpon>
     </Compile>

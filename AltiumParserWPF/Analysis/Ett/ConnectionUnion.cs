@@ -90,6 +90,17 @@ namespace AltiumParserWPF.Analysis.Ett
                     return line;
                 }
             }
+            set
+            {
+                if (value.Contains("["))
+                {
+                    Name = value.Split('[')[0];
+                }
+                else
+                {
+                    Name = value;
+                }
+            }
         }
 
         public ConnectionUnion(string name)

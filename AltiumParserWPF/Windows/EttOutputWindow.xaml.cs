@@ -14,20 +14,30 @@ namespace AltiumParserWPF.Windows
         public List<ConnectionUnion> Unions;
         private Window _parentWindow;
         private bool _codeclosing;
+        public EttOutputTemplate result;
 
-        public EttOutputWindow(List<ConnectionUnion> unions, Window parentwindow)
+        public EttOutputWindow(List<ConnectionUnion> unions, string type, Window parentwindow)
         {
             _codeclosing = false;
             _parentWindow = parentwindow;
             Unions = unions;
 
-            //var result = new EttOutputCommon(Unions);
-            var result = new EttOutputOlegStyle(Unions);
-            var doc = new TextDocument();
+            if (type == "Common")
+            {
+                result = new EttOutputCommon(Unions);
+            }
 
+            if (type == "Oleg")
+            {
+                result = new EttOutputOlegStyle(Unions);
+            }
 
-            doc.Text = result.Container;
-            doc.FileName = result.Name;
+            var doc = new TextDocument
+            {
+                Text = result.Container,
+                FileName = result.Name
+            };
+
             InitializeComponent();
 
             Editor.SyntaxHighlighting = ResourceLoader.LoadHighlightingDefinition("CustomSyntaxDefinitionCpp.xshd");
@@ -48,7 +58,9 @@ namespace AltiumParserWPF.Windows
 
         private void BackButtonClick(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            _parentWindow.Show();
+            _codeclosing = true;
+            Close();
         }
     }
 }

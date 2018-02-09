@@ -56,19 +56,19 @@ namespace AltiumParserWPF.Analysis.Ett.OutputConverters
 
                     if (union.Direction == Direction.Out)
                     {
-                        templine += "OUT,";
+                        templine += "OUT, ";
                         if (union.InitialState == InitialState.Low)
                         {
-                            templine += "LO,";
+                            templine += "LO, ";
                         }
                         else
                         {
-                            templine += "HI,";
+                            templine += "HI, ";
                         }
                     }
                     else
                     {
-                        templine += "INP,LO";
+                        templine += "INP, LO, ";
                     }
 
                     templine += union.Chanels.Count + ",\n\t";
@@ -101,19 +101,19 @@ namespace AltiumParserWPF.Analysis.Ett.OutputConverters
 
                     if (union.Direction == Direction.Out)
                     {
-                        templine += "OUT,";
+                        templine += "OUT, ";
                         if (union.InitialState == InitialState.Low)
                         {
-                            templine += "LO,";
+                            templine += "LO, ";
                         }
                         else
                         {
-                            templine += "HI,";
+                            templine += "HI, ";
                         }
                     }
                     else
                     {
-                        templine += "INP,LO,";
+                        templine += "INP, LO, ";
                     }
 
                     templine += union.Chanels.Count + ",\n\t";

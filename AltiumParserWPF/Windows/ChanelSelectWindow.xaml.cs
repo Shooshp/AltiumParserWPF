@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using AltiumParserWPF.Analysis;
 using AltiumParserWPF.Analysis.Ett;
+using AltiumParserWPF.Analysis.F2K;
 
 namespace AltiumParserWPF.Windows
 {
@@ -15,6 +16,14 @@ namespace AltiumParserWPF.Windows
         public List<ConnectionUnion> Connections { get; set; }
         private Window _startupWindow;
         private bool _codeclosing;
+
+        private const string NewettSmall = "DIN41612R.РОЗ.УГЛ.48";
+        private const string NewettBig = "DIN41612R.РОЗ.УГЛ.96";
+
+        private const string OldettSmall = "CONN_DIN_48";
+        private const string OldettBig = "CONN_DIN_96";
+
+        private const string NewF2k = "FORMULA-256";
 
         public ChanelSelectWindow(string path, Window startupWindow)
         {
@@ -26,22 +35,25 @@ namespace AltiumParserWPF.Windows
             MyWindow.SizeChanged += MyWindowOnSizeChanged;
 
             var parser = new AltiumParser.AltiumParser(path);
-            var type = PcbAnalysis.GetPsbType(parser);
-
+            var type = GetPsbType(parser);
 
             PCB pcb;
 
             switch (type)
             {
-                case PcbAnalysis.PcbTypes.EttNew:
+                case PcbTypes.EttNew:
                     pcb = new NewEttBoard(parser);
                     Connections = pcb.Connections;
                     break;
 
-                case PcbAnalysis.PcbTypes.EttOld:
+                case PcbTypes.EttOld:
                     pcb = new OldEttBoard(parser);
                     Connections = pcb.Connections;
-                    break;  
+                    break;
+
+                case PcbTypes.F2kNew:
+                    pcb = new NewF2KBoard(parser);
+                    break;
             }
 
             foreach (var connection in Connections)
@@ -51,6 +63,28 @@ namespace AltiumParserWPF.Windows
             
             ConnectionList.ItemsSource = Connections;
             ConnectionList.SelectionChanged += ConnectionListOnSelectionChanged;
+        }
+
+        private static PcbTypes GetPsbType(AltiumParser.AltiumParser board)
+        {
+            if (board.BuildOfMaterials.Exists(x => x.DeviceType.Contains(NewettSmall))
+                && board.BuildOfMaterials.Exists(x => x.DeviceType.Contains(NewettBig)))
+            {
+                return PcbTypes.EttNew;
+            }
+
+            if (board.BuildOfMaterials.Exists(x => x.DeviceType.Contains(OldettSmall))
+                && board.BuildOfMaterials.Exists(x => x.DeviceType.Contains(OldettBig)))
+            {
+                return PcbTypes.EttOld;
+            }
+
+            if (board.BuildOfMaterials.Exists(x => x.DeviceType.Contains(NewF2k)))
+            {
+                return PcbTypes.F2kNew;
+            }
+
+            return PcbTypes.Unknown;
         }
 
 
@@ -79,17 +113,20 @@ namespace AltiumParserWPF.Windows
         {
             var selected = ConnectionList.SelectedItems;
             var unions = new List<ConnectionUnion>();
+            var tempnames = new List<string>();
 
             foreach (ConnectionUnion item in selected)
             {
                 unions.Add(item);
+                tempnames.Add(item.Name);
             }
 
             if (unions.Count != 1)
             {
+                var predictedname = TextAnalysis.GetCommonInListOfStrings(tempnames);
                 var tempunion = new ConnectionUnion("new");
 
-                var dialog = new PopupDialog("Введите имя для нового массива.");
+                var dialog = new PopupDialog("Введите имя для нового массива.", predictedname);
                 if (dialog.ShowDialog() == true)
                 {
                     tempunion.Name = dialog.ResponseText;
@@ -307,5 +344,28 @@ namespace AltiumParserWPF.Windows
                 Application.Current.Shutdown();
             }
         }
+
+        private void ConnectionList_OnSorting(object sender, DataGridSortingEventArgs e)
+        {
+            var args = e;
+            var column = args.Column.SortMemberPath;
+
+            if (column == "DisplayName")
+            {
+                ConnectionList.ItemsSource = null;
+                Connections = Connections.OrderBy(x => x.DisplayName, new AlphanumComparatorFast()).ToList();
+                ConnectionList.ItemsSource = Connections;
+            }
+            args.Handled = true;
+        }
+    }
+
+    public enum PcbTypes
+    {
+        EttNew,
+        EttOld,
+        F2kNew,
+        F2kOld,
+        Unknown
     }
 }

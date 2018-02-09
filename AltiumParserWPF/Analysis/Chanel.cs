@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace AltiumParserWPF.Analysis.Ett
 {
+    [DebuggerDisplay("Chanel: {ChanelName}, ConnectionName: {ConnectionName}")]
     public class Chanel
     {
         public string ChanelName { get; set; }
@@ -44,7 +46,5 @@ namespace AltiumParserWPF.Analysis.Ett
             ConnectionName = connection;
             ConnectedObjects = new List<string>();
         }
-
-
     }
 }

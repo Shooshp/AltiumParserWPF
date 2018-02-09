@@ -28,13 +28,23 @@
                 <x:Type TypeName="EnumSource:InitialState"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
     </Window.Resources>
     
     <Grid Margin="10" Name="MainGrid">
 
         <DataGrid Name="ConnectionConfiguration" ItemsSource="{Binding}" Margin="0,0,0,50" AutoGenerateColumns="False" SelectionMode="Single">
+
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding DisplayName, Mode=OneWay}" Width="Auto"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding DisplayName, Mode=TwoWay}" Width="Auto"/>
 
                 <DataGridTemplateColumn Header="Type" Width="Auto">
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -42,13 +52,19 @@
                             <ComboBox ItemsSource="{Binding Source={StaticResource Datafromenum1}}"
                                       SelectedItem="{Binding Path=ConnectionType}"
                                       Height="Auto"
-                                      SelectionChanged="OnTypeChange">
+                                      SelectionChanged="OnTypeChange"
+                                      IsEditable="False">
                             </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=ConnectionType}" Height="Auto"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource Datafromenum1}}"
+                                      SelectedItem="{Binding Path=ConnectionType}"
+                                      Height="Auto"
+                                      SelectionChanged="OnTypeChange"
+                                      IsEditable="False">
+                            </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -64,7 +80,10 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Direction}" Height="Auto"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource Datafromenum2}}"
+                                      SelectedItem="{Binding Path=Direction}"
+                                      Height="Auto"
+                                      SelectionChanged="OnDirectionChange"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -80,7 +99,10 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=InitialState}" Height="Auto"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource Datafromenum3}}"
+                                      SelectedItem="{Binding Path=InitialState}"
+                                      Height="Auto"
+                                      SelectionChanged="OnStateChange"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -91,8 +113,20 @@
 
 
         <Grid Height="50" VerticalAlignment="Bottom">
+
             <Button Content="Назад" Click="BackButtonClick" Width="75" Height="30" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <Button Content="Далее" Click="NextButtonClick" Width="75" Height="30" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+
+            <ComboBox Name="OutputType" Width="100" Height="30"  HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                <ComboBox.Style>
+                    <Style TargetType="ComboBox">
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Stretch"/>
+                    </Style>
+                </ComboBox.Style>
+                <ComboBoxItem Content="Oleg" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ComboBoxItem Content="Common" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </ComboBox>
         </Grid>
 
     </Grid>

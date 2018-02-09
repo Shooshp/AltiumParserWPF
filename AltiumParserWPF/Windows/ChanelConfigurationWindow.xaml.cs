@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using AltiumParserWPF.Analysis.Ett;
 
 namespace AltiumParserWPF.Windows
@@ -54,7 +55,7 @@ namespace AltiumParserWPF.Windows
             if (!error)
             {
                 var ettoutputwindow =
-                    new EttOutputWindow(Unions, this)
+                    new EttOutputWindow(Unions, OutputType.Text, this)
                     {
                         WindowStartupLocation = WindowStartupLocation.Manual,
                         Left = Left,
@@ -78,48 +79,54 @@ namespace AltiumParserWPF.Windows
         private void OnTypeChange(object sender, SelectionChangedEventArgs e)
         {
             var selectedunion = (ConnectionUnion)ConnectionConfiguration.SelectedItem;
-
-            var args = (ComboBox)e.Source;
-            var newtype = (ConnectionType)args.SelectedItem;
-            var currenttype =  selectedunion.ConnectionType;
-
-            if (newtype != currenttype)
+            if (selectedunion!=null)
             {
-                selectedunion.ConnectionType = newtype;
-                ConnectionConfiguration.ItemsSource = null;
-                ConnectionConfiguration.ItemsSource = Unions;
+                var args = (ComboBox)e.Source;
+                var newtype = (ConnectionType)args.SelectedItem;
+                var currenttype = selectedunion.ConnectionType;
+
+                if (newtype != currenttype)
+                {
+                    selectedunion.ConnectionType = newtype;
+                    ConnectionConfiguration.ItemsSource = null;
+                    ConnectionConfiguration.ItemsSource = Unions;
+                }
             }
         }
 
         private void OnDirectionChange(object sender, SelectionChangedEventArgs e)
         {
             var selectedunion = (ConnectionUnion)ConnectionConfiguration.SelectedItem;
-
-            var args = (ComboBox)e.Source;
-            var newDirection = (Direction)args.SelectedItem;
-            var currentdirection = selectedunion.Direction;
-
-            if (newDirection != currentdirection)
+            if (selectedunion != null)
             {
-                selectedunion.Direction = newDirection;
-                ConnectionConfiguration.ItemsSource = null;
-                ConnectionConfiguration.ItemsSource = Unions;
+                var args = (ComboBox)e.Source;
+                var newDirection = (Direction)args.SelectedItem;
+                var currentdirection = selectedunion.Direction;
+
+                if (newDirection != currentdirection)
+                {
+                    selectedunion.Direction = newDirection;
+                    ConnectionConfiguration.ItemsSource = null;
+                    ConnectionConfiguration.ItemsSource = Unions;
+                }
             }
         }
 
         private void OnStateChange(object sender, SelectionChangedEventArgs e)
         {
             var selectedunion = (ConnectionUnion)ConnectionConfiguration.SelectedItem;
-
-            var args = (ComboBox)e.Source;
-            var newInitialState = (InitialState)args.SelectedItem;
-            var currentInitialState = selectedunion.InitialState;
-
-            if (newInitialState != currentInitialState)
+            if (selectedunion!=null)
             {
-                selectedunion.InitialState = newInitialState;
-                ConnectionConfiguration.ItemsSource = null;
-                ConnectionConfiguration.ItemsSource = Unions;
+                var args = (ComboBox)e.Source;
+                var newInitialState = (InitialState)args.SelectedItem;
+                var currentInitialState = selectedunion.InitialState;
+
+                if (newInitialState != currentInitialState)
+                {
+                    selectedunion.InitialState = newInitialState;
+                    ConnectionConfiguration.ItemsSource = null;
+                    ConnectionConfiguration.ItemsSource = Unions;
+                }
             }
         }
     } 
