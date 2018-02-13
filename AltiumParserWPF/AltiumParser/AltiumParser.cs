@@ -330,6 +330,6 @@ namespace AltiumParserWPF.AltiumParser
                     }
                 }
             }
-        }
+        }        
     }
 }

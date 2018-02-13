@@ -70,6 +70,8 @@
         <Grid Height="50" VerticalAlignment="Bottom">
             <Button Content="Отмена" Click="CancelButtonClick" Width="75" Height="30" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <Button Content="Далее" Click="NextButtonClick" Width="75" Height="30" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox Name="Report" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" Height="30" Margin="10" FontWeight="Bold" TextAlignment="Center" BorderThickness="0" IsReadOnly="True">
+            </TextBox>
         </Grid>
     </Grid>
 </Window>

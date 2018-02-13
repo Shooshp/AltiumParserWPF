@@ -10,7 +10,7 @@
 
         <Grid Margin="10" >
             <TextBlock Name="Title" Text="Выберите файл печатной платы" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <TextBox x:Name="FilePathTextBox" Height="25" Margin="0,0,76,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="Auto" BorderBrush="Black"/>
+            <TextBox x:Name="FilePathTextBox" Height="25" Margin="0,0,76,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="Auto" BorderBrush="Black" TextChanged="FilePathTextBox_OnTextChanged"/>
             <Button Content="Browse" Click="BrowseButtonClick" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             <Button Content="Ok" Click="OkButtonClick" Width="50" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
         </Grid>

@@ -55,7 +55,7 @@ namespace AltiumParserWPF.Analysis.Ett
                             tempname = "J1_" + pin.Name;
                         }
 
-                        if (EttChanelMap.Mapping.Exists(x => x.Socket == tempname))
+                        if (ChanelMap.EttMapping.Exists(x => x.Socket == tempname))
                         {
                             if (pin.ConnectedNets.Count != 0)
                             {
@@ -73,7 +73,7 @@ namespace AltiumParserWPF.Analysis.Ett
                 }
             }
 
-            foreach (var avaliblechanel in EttChanelMap.Mapping)
+            foreach (var avaliblechanel in ChanelMap.EttMapping)
             {
                 if (!ActiveChanels.Exists(x => x.ChanelName == avaliblechanel.Socket))
                 {

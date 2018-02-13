@@ -21,28 +21,55 @@ namespace AltiumParserWPF.Analysis.Ett
                 Connections.Add(new EntryPoint(sheetEntry));
             }
         }
+
+        public DUT(Component component)
+        {
+            Name = component.DesignItemId;
+            Connections = new List<EntryPoint>();
+
+            foreach (var pin in component.PinList)
+            {
+                Connections.Add(new EntryPoint(pin));
+            }
+        }
     }
 
     public class EntryPoint
     {
         public string Name;
         public string Connection;
-        public SheetEntry Entry;
 
         public EntryPoint(SheetEntry entry)
         {
-            Entry = entry;
-            Name = Entry.Name;
+            Name = entry.Name.ToUpper(); 
 
-            if (Entry.ConnectedNets.Count!=0)
+            if (entry.ConnectedNets.Count!=0)
             {
-                Connection = Entry.ConnectedNets.ElementAt(0).Text.ToUpper();
+                Connection = entry.ConnectedNets.ElementAt(0).Text.ToUpper();
             }
             else
             {
-                if (Entry.ConnectedPorts.Count!=0)
+                if (entry.ConnectedPorts.Count!=0)
                 {
-                    Connection = Entry.ConnectedPorts.ElementAt(0).Name.ToUpper();
+                    Connection = entry.ConnectedPorts.ElementAt(0).Name.ToUpper();
+                }
+            }
+        }
+
+        public EntryPoint(Pin pin)
+        {
+            Name = pin.Name.ToUpper();
+
+
+            if (pin.ConnectedNets.Count != 0)
+            {
+                Connection = pin.ConnectedNets.ElementAt(0).Text.ToUpper();
+            }
+            else
+            {
+                if (pin.ConnectedPorts.Count != 0)
+                {
+                    Connection = pin.ConnectedPorts.ElementAt(0).Name.ToUpper();
                 }
             }
         }

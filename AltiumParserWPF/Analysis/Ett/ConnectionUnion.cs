@@ -82,11 +82,11 @@ namespace AltiumParserWPF.Analysis.Ett
             {
                 if (Chanels.Count == 1)
                 {
-                    return Name;
+                    return Name.Replace("\\","");
                 }
                 else
                 {
-                    var line = Name + "[" + Chanels.Count + "]";
+                    var line = Name.Replace("\\", "") + "[" + Chanels.Count + "]";
                     return line;
                 }
             }

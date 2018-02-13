@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -53,6 +54,7 @@ namespace AltiumParserWPF.Windows
 
                 case PcbTypes.F2kNew:
                     pcb = new NewF2KBoard(parser);
+                    Connections = pcb.Connections;
                     break;
             }
 
@@ -63,6 +65,15 @@ namespace AltiumParserWPF.Windows
             
             ConnectionList.ItemsSource = Connections;
             ConnectionList.SelectionChanged += ConnectionListOnSelectionChanged;
+
+            var counter = 0;
+
+            foreach (var connection in Connections)
+            {
+                counter += connection.Chanels.Count;
+            }
+
+            Report.Text = "Плата " + Path.GetFileName(parser.FilePath).Replace(".SchDoc", "") + " || " + counter + " Каналов";
         }
 
         private static PcbTypes GetPsbType(AltiumParser.AltiumParser board)
