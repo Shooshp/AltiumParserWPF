@@ -40,7 +40,7 @@ namespace AltiumParserWPF.Windows
             };
 
             InitializeComponent();
-
+            Title = ApplicationSettings.Name;
             Editor.SyntaxHighlighting = ResourceLoader.LoadHighlightingDefinition("CustomSyntaxDefinitionCpp.xshd");
             Editor.Document = doc;
             Editor.ShowLineNumbers = true;

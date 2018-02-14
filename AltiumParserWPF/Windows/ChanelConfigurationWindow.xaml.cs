@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using AltiumParserWPF.Analysis.Ett;
@@ -28,6 +31,7 @@ namespace AltiumParserWPF.Windows
             }
             
             InitializeComponent();
+            Title = ApplicationSettings.Name;
 
             ConnectionConfiguration.ItemsSource = Unions;
         }

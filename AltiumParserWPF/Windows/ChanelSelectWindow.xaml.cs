@@ -34,7 +34,7 @@ namespace AltiumParserWPF.Windows
             _startupWindow = startupWindow;
             Connections = new List<ConnectionUnion>();
             InitializeComponent();
-
+            Title = ApplicationSettings.Name;
             MyWindow.SizeChanged += MyWindowOnSizeChanged;
 
             var parser = new AltiumParser.AltiumParser(path);
@@ -143,7 +143,7 @@ namespace AltiumParserWPF.Windows
                 var predictedname = TextAnalysis.GetCommonInListOfStrings(tempnames);
                 var tempunion = new ConnectionUnion("new");
 
-                var dialog = new PopupDialog("Введите имя для нового массива.", predictedname);
+                var dialog = new Popups.PopupDialog("Введите имя для нового массива.", predictedname);
                 if (dialog.ShowDialog() == true)
                 {
                     tempunion.Name = dialog.ResponseText;

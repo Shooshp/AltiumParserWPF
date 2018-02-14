@@ -29,9 +29,18 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
+
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="Margin" Value="0" />
+            <Setter Property="Opacity" Value="100"/>
+
+            <Style.Triggers>
+                <Trigger Property ="Text" Value="Na">
+                    <Setter Property="Foreground" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
+
 
         <Style TargetType="DataGridCell">
             <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -74,7 +83,7 @@
                         <DataTemplate>
                             <ComboBox ItemsSource="{Binding Source={StaticResource Datafromenum2}}"
                                       SelectedItem="{Binding Path=Direction}"
-                                      Height="Auto"
+                                      Height="Auto" 
                                       SelectionChanged="OnDirectionChange"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
