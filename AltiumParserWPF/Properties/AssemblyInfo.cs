@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("AltiumParserWPF")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("gypnor")]
+[assembly: AssemblyCompany("NCSEO")]
 [assembly: AssemblyProduct("AltiumParserWPF")]
-[assembly: AssemblyCopyright("Copyright © gypnor 2018")]
+[assembly: AssemblyCopyright("Copyright © ParshinSP 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -32,6 +32,7 @@ namespace AltiumParserWPF.Windows
                 result = new EttOutputOlegStyle(Unions);
             }
 
+
             var doc = new TextDocument
             {
                 Text = result.Container,

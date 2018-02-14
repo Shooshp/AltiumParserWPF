@@ -18,6 +18,8 @@ namespace AltiumParserWPF.Windows
         private Window _startupWindow;
         private bool _codeclosing;
 
+        private PCB pcb;
+
         private const string NewettSmall = "DIN41612R.РОЗ.УГЛ.48";
         private const string NewettBig = "DIN41612R.РОЗ.УГЛ.96";
 
@@ -37,8 +39,6 @@ namespace AltiumParserWPF.Windows
 
             var parser = new AltiumParser.AltiumParser(path);
             var type = GetPsbType(parser);
-
-            PCB pcb;
 
             switch (type)
             {
@@ -73,7 +73,13 @@ namespace AltiumParserWPF.Windows
                 counter += connection.Chanels.Count;
             }
 
-            Report.Text = "Плата " + Path.GetFileName(parser.FilePath).Replace(".SchDoc", "") + " || " + counter + " Каналов";
+            Report.Text = "Плата " + Path.GetFileName(parser.FilePath)?.Replace(".SchDoc", "") + " || " + counter + " Каналов";
+
+            if (pcb.GetType() == typeof(NewEttBoard) || pcb.GetType() == typeof(OldEttBoard))
+            {
+                var temppcb = (EttPCB) pcb;
+                Report.Text += " || " + temppcb.DutCount + " DUTs";
+            }
         }
 
         private static PcbTypes GetPsbType(AltiumParser.AltiumParser board)

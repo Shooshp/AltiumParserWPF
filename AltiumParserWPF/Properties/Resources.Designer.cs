@@ -69,5 +69,15 @@ namespace AltiumParserWPF.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon pusheen_5 {
+            get {
+                object obj = ResourceManager.GetObject("pusheen_5", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

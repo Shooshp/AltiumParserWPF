@@ -3,11 +3,8 @@ using System.Linq;
 
 namespace AltiumParserWPF.Analysis.Ett
 {
-    public class NewEttBoard : PCB
+    public class NewEttBoard : EttPCB
     {
-        public int DutCount;
-        public List<DUT> Duts;
-
         public NewEttBoard(AltiumParser.AltiumParser parser)
         {
             Board = parser;
@@ -16,8 +13,7 @@ namespace AltiumParserWPF.Analysis.Ett
             GetActiveChanels();
             
             Connections = new List<ConnectionUnion>();
-            Connections = GetConnections();
-           
+            Connections = GetConnections(); 
         }
 
         private void GetActiveChanels()
@@ -132,24 +128,6 @@ namespace AltiumParserWPF.Analysis.Ett
             var sortedconnections = tempconnections.OrderBy(x => x.Name, new AlphanumComparatorFast()).ToList();
 
             return sortedconnections;
-        }
-
-        private int GetDutNumber()
-        {
-            Duts = new List<DUT>();
-
-            var temp = new List<DUT>();
-            foreach (var sheet in Board.SheetSymbols)
-            {
-                if (sheet.SheetName.Text.ToUpper().Contains("DUT"))
-                {
-                    temp.Add(new DUT(sheet));
-                }
-            }
-
-            Duts = temp.OrderBy(x => x.Name, new AlphanumComparatorFast()).ToList();
-
-            return Duts.Count;
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using AltiumParserWPF.Analysis.Ett;
 
 namespace AltiumParserWPF.Windows
@@ -10,14 +9,14 @@ namespace AltiumParserWPF.Windows
     public partial class ChanelConfigurationWindow
     {
         public List<ConnectionUnion> Unions;
-        private Window _parentWindow;
+        public Window ParentWindow;
         private bool _codeclosing;
 
 
         public ChanelConfigurationWindow(List<ConnectionUnion> unions, Window parentwindow)
         {
             _codeclosing = false;
-            _parentWindow = parentwindow;
+            ParentWindow = parentwindow;
             Unions = unions;
 
             foreach (var union in Unions)
@@ -35,7 +34,7 @@ namespace AltiumParserWPF.Windows
 
         private void BackButtonClick(object sender, RoutedEventArgs e)
         {
-            _parentWindow.Show();
+            ParentWindow.Show();
             _codeclosing = true;
             Close();
         }
@@ -54,17 +53,20 @@ namespace AltiumParserWPF.Windows
 
             if (!error)
             {
-                var ettoutputwindow =
-                    new EttOutputWindow(Unions, OutputType.Text, this)
-                    {
-                        WindowStartupLocation = WindowStartupLocation.Manual,
-                        Left = Left,
-                        Top = Top,
-                        Width = ActualWidth,
-                        Height = ActualHeight
-                    };
-                ettoutputwindow.Show();
-                Hide();
+                if (!string.IsNullOrEmpty(OutputType.Text)) 
+                {
+                    var ettoutputwindow =
+                        new EttOutputWindow(Unions, OutputType.Text, this)
+                        {
+                            WindowStartupLocation = WindowStartupLocation.Manual,
+                            Left = Left,
+                            Top = Top,
+                            Width = ActualWidth,
+                            Height = ActualHeight
+                        };
+                    ettoutputwindow.Show();
+                    Hide();
+                }
             }
         }
 
@@ -87,7 +89,21 @@ namespace AltiumParserWPF.Windows
 
                 if (newtype != currenttype)
                 {
-                    selectedunion.ConnectionType = newtype;
+                    if (ConnectionConfiguration.SelectedItems.Count > 1)
+                    {
+                        var selectedunions = ConnectionConfiguration.SelectedItems;
+
+                        foreach (var union in selectedunions)
+                        {
+                            var temp = (ConnectionUnion)union;
+                            temp.ConnectionType = newtype;
+                        }
+                    }
+                    else
+                    {
+                        selectedunion.ConnectionType = newtype;
+                    }
+
                     ConnectionConfiguration.ItemsSource = null;
                     ConnectionConfiguration.ItemsSource = Unions;
                 }
@@ -105,7 +121,21 @@ namespace AltiumParserWPF.Windows
 
                 if (newDirection != currentdirection)
                 {
-                    selectedunion.Direction = newDirection;
+                    if (ConnectionConfiguration.SelectedItems.Count > 1)
+                    {
+                        var selectedunions = ConnectionConfiguration.SelectedItems;
+
+                        foreach (var union in selectedunions)
+                        {
+                            var temp = (ConnectionUnion) union;
+                            temp.Direction = newDirection;
+                        }
+                    }
+                    else
+                    {
+                        selectedunion.Direction = newDirection;
+                    }
+                    
                     ConnectionConfiguration.ItemsSource = null;
                     ConnectionConfiguration.ItemsSource = Unions;
                 }
@@ -123,7 +153,21 @@ namespace AltiumParserWPF.Windows
 
                 if (newInitialState != currentInitialState)
                 {
-                    selectedunion.InitialState = newInitialState;
+                    if (ConnectionConfiguration.SelectedItems.Count > 1)
+                    {
+                        var selectedunions = ConnectionConfiguration.SelectedItems;
+
+                        foreach (var union in selectedunions)
+                        {
+                            var temp = (ConnectionUnion)union;
+                            temp.InitialState = newInitialState;
+                        }
+                    }
+                    else
+                    {
+                        selectedunion.InitialState = newInitialState;
+                    }
+
                     ConnectionConfiguration.ItemsSource = null;
                     ConnectionConfiguration.ItemsSource = Unions;
                 }

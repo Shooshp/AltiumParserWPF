@@ -11,67 +11,77 @@ namespace AltiumParserWPF.Analysis.Ett
         public string Name;
         public List<Chanel> Chanels { get; set; }
         private ConnectionType _type;
-        private Direction direction;
-        private InitialState initialstate;
+        private Direction _direction;
+        private InitialState _initialstate;
 
         public ConnectionType ConnectionType
         {
             get { return _type; }
-            set { _type = value; }
+            set
+            {
+                if (Chanels.Count == 1)
+                {
+                    _type = ConnectionType.Global;
+                }
+                else
+                {
+                    _type = value;
+                }
+            }
         }
 
         public Direction Direction
         {
-            get { return direction; }
+            get { return _direction; }
             set
             {
-                direction = value;
+                _direction = value;
 
-                if (direction == Direction.In)
+                if (_direction == Direction.In)
                 {
-                    initialstate = InitialState.HiZ;
+                    _initialstate = InitialState.HiZ;
                 }
                 else
                 {
-                    initialstate = InitialState.Na;
+                    _initialstate = InitialState.Na;
                 }
             }
         }
 
         public InitialState InitialState
         {
-            get { return initialstate; }
+            get { return _initialstate; }
             set
             {
                 var state = value;
-                if (direction != Direction.Na)
+                if (_direction != Direction.Na)
                 {
-                    if (direction == Direction.In)
+                    if (_direction == Direction.In)
                     {
-                        initialstate = InitialState.HiZ;
+                        _initialstate = InitialState.HiZ;
                     }
                     else
                     {
-                        if (direction == Direction.Bidir)
+                        if (_direction == Direction.Bidir)
                         {
-                            initialstate = state;
+                            _initialstate = state;
                         }
                         else
                         {
                             if (state == InitialState.HiZ)
                             {
-                                initialstate = InitialState.Na;
+                                _initialstate = InitialState.Na;
                             }
                             else
                             {
-                                initialstate = state;
+                                _initialstate = state;
                             }
                         }
                     }
                 }
                 else
                 {
-                    initialstate = InitialState.Na;
+                    _initialstate = InitialState.Na;
                 }
             }
         }
@@ -107,8 +117,8 @@ namespace AltiumParserWPF.Analysis.Ett
         {
             Name = name;
             Chanels = new List<Chanel>();
-            direction = Direction.Na;
-            initialstate = InitialState.Na;
+            _direction = Direction.Na;
+            _initialstate = InitialState.Na;
         }
 
         public void Add(Chanel chanel)
