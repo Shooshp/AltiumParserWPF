@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using Microsoft.Win32;
 
 namespace AltiumParserWPF
@@ -19,6 +20,7 @@ namespace AltiumParserWPF
 
             InitializeComponent();
             Title = ApplicationSettings.Name;
+            RecentFilesList.ItemsSource = RecentFiles;
         }
 
         private void BrowseButtonClick(object sender, RoutedEventArgs e)
@@ -36,7 +38,7 @@ namespace AltiumParserWPF
                 var folder = path.Replace(Path.GetFileName(path), "");
                 if (Directory.Exists(folder))
                 {
-                    RecentFiles.Add(path);
+                    AddToRecent(path);
                     var chanelSelectWindow = new Windows.ChanelSelectWindow(path, this);
                     chanelSelectWindow.Show();
                     Hide();
@@ -48,8 +50,7 @@ namespace AltiumParserWPF
         {
             var path = FilePathTextBox.Text;
             if (!string.IsNullOrEmpty(path) && path.Contains(".SchDoc"))
-            {
-                AddToRecent(path);
+            {               
                 var index = path.IndexOf(".SchDoc", StringComparison.Ordinal);
                 FilePathTextBox.Text = path.Substring(0, index + 7);
             }
@@ -58,46 +59,41 @@ namespace AltiumParserWPF
         private List<string> GetRecentFiles()
         {
             var appPath = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\recent.txt";
-            var templist = new List<string>();
-            using (var filestream = File.Open(appPath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
-            {
-                using (var reader = new StreamReader(appPath))
-                {
-                    var templine = "";
 
-                    while ((templine = reader.ReadLine()) != null) 
-                    {
-                        templist.Add(templine);
-                    }
-                }
-                filestream.Close();
-            }
+            var templist = File.ReadAllLines(appPath).ToList();
 
             return templist;
         }
 
         private void AddToRecent(string file)
         {
-            RecentFiles.Add(file);
+            if (!RecentFiles.Exists(x=>x == file)) 
+            {
+                RecentFiles.Insert(0, file);
+            }
+            else
+            {
+                RecentFiles.RemoveAll(x=>x == file);
+                RecentFiles.Insert(0,file);
+            }
 
             if (RecentFiles.Count > 5) 
             {
-                RecentFiles.RemoveRange(5, RecentFiles.Count);
+                RecentFiles.RemoveRange(5, RecentFiles.Count - 5);
             }
 
             var appPath = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\recent.txt";
 
-            using (var filestream = File.Open(appPath, FileMode.Open, FileAccess.Write))
-            {
-                using (var writer = new StreamWriter(appPath))
-                {
-                    foreach (var fileline in RecentFiles)
-                    {
-                        writer.WriteLine(fileline);
-                    }
-                }
-                filestream.Close();
-            }
+            File.WriteAllLines(appPath, RecentFiles);
+        }
+
+        private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
+        {
+            var args = e;
+            var sen = sender;
+            var link = (Hyperlink)args.OriginalSource;
+            FilePathTextBox.Text = link.DataContext.ToString();
+            args.Handled = true;
         }
     }
 }
