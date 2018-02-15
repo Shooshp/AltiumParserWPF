@@ -59,8 +59,15 @@ namespace AltiumParserWPF
         private List<string> GetRecentFiles()
         {
             var appPath = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\recent.txt";
-
-            var templist = File.ReadAllLines(appPath).ToList();
+            var templist = new List<string>();
+            if (File.Exists(appPath)) 
+            {
+                templist = File.ReadAllLines(appPath).ToList();
+            }
+            else
+            {
+                File.Create(appPath);
+            }
 
             return templist;
         }

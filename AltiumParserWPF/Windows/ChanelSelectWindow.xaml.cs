@@ -27,6 +27,7 @@ namespace AltiumParserWPF.Windows
         private const string OldettBig = "CONN_DIN_96";
 
         private const string NewF2k = "FORMULA-256";
+        private const string NewF2k2 = "FORMULA256";
 
         public ChanelSelectWindow(string path, Window startupWindow)
         {
@@ -96,7 +97,8 @@ namespace AltiumParserWPF.Windows
                 return PcbTypes.EttOld;
             }
 
-            if (board.BuildOfMaterials.Exists(x => x.DeviceType.Contains(NewF2k)))
+            if (board.BuildOfMaterials.Exists(x => x.DeviceType.Contains(NewF2k)) || 
+                board.BuildOfMaterials.Exists(x => x.DeviceType.Contains(NewF2k2)))
             {
                 return PcbTypes.F2kNew;
             }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AltiumParserWPF.AltiumParser.Records;
 
@@ -34,42 +35,56 @@ namespace AltiumParserWPF.Analysis.Ett
         }
     }
 
+    [DebuggerDisplay("EntryPoint:{Name}, Connection:{Connection}")]
     public class EntryPoint
     {
         public string Name;
-        public string Connection;
+        public List<string> Connection;
 
         public EntryPoint(SheetEntry entry)
         {
             Name = entry.Name.ToUpper(); 
+            Connection = new List<string>();
 
             if (entry.ConnectedNets.Count!=0)
             {
-                Connection = entry.ConnectedNets.ElementAt(0).Text.ToUpper();
+                foreach (var net in entry.ConnectedNets)
+                {
+                    Connection.Add(net.Text.ToUpper());
+                }
             }
             else
             {
                 if (entry.ConnectedPorts.Count!=0)
                 {
-                    Connection = entry.ConnectedPorts.ElementAt(0).Name.ToUpper();
+                    foreach (var port in entry.ConnectedPorts)
+                    {
+                        Connection.Add(port.Name.ToUpper());
+                    }
                 }
             }
         }
 
         public EntryPoint(Pin pin)
         {
-            Name = pin.Name.ToUpper();
-
+            Name = pin.Name?.ToUpper() + "(pin:" + pin.Designator + ")";
+            Connection = new List<string>();
 
             if (pin.ConnectedNets.Count != 0)
             {
-                Connection = pin.ConnectedNets.ElementAt(0).Text.ToUpper();
+                foreach (var net in pin.ConnectedNets)
+                {
+                    Connection.Add(net.Text.ToUpper());
+                }
             }
             else
             {
                 if (pin.ConnectedPorts.Count != 0)
                 {
-                    Connection = pin.ConnectedPorts.ElementAt(0).Name.ToUpper();
+                    foreach (var port in pin.ConnectedPorts)
+                    {
+                        Connection.Add(port.Name.ToUpper());
+                    }
                 }
             }
         }

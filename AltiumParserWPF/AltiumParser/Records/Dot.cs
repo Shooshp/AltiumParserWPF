@@ -10,11 +10,20 @@ namespace AltiumParserWPF.AltiumParser.Records
 
         public Dot(int x, int xfrac, int y, int yfrac)
         {
-            var tempx = x + "." + xfrac;
-            var tempy = y + "." + yfrac;
+            var tempx = x + "." + Math.Abs(xfrac);
+            var tempy = y + "." + Math.Abs(yfrac);
 
-            X = float.Parse(tempx, CultureInfo.InvariantCulture.NumberFormat);
-            Y = float.Parse(tempy, CultureInfo.InvariantCulture.NumberFormat);
+            try
+            {
+                X = float.Parse(tempx, CultureInfo.InvariantCulture.NumberFormat);
+                Y = float.Parse(tempy, CultureInfo.InvariantCulture.NumberFormat);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
         }
 
         public Dot(float x, float y)

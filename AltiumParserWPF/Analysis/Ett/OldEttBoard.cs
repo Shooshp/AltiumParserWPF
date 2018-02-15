@@ -77,7 +77,7 @@ namespace AltiumParserWPF.Analysis.Ett
 
                     foreach (var chanel in ActiveChanels)
                     {
-                        if (chanel.ConnectionName == entryPoint.Connection)
+                        if (entryPoint.Connection.Exists(x => x == chanel.ConnectionName))
                         {
                             chanel.ConnectedObjects.Add(dut.Name + ":" + entryPoint.Name);
                             tempconnections.Single(x => x.Name == entryPoint.Name).Add(chanel);

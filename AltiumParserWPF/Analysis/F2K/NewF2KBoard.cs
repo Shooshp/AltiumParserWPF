@@ -26,7 +26,7 @@ namespace AltiumParserWPF.Analysis.F2K
         {
             foreach (var component in Board.Components)
             {
-                if (component.DesignItemId.Contains("FORMULA-256") && component.CurrentPartId < 17)
+                if ((component.DesignItemId.Contains("FORMULA-256") || component.DesignItemId.Contains("FORMULA256")) && component.CurrentPartId < 17)
                 {
                     foreach (var pin in component.PinList)
                     {
@@ -56,7 +56,7 @@ namespace AltiumParserWPF.Analysis.F2K
 
             foreach (var component in Board.Components)
             {
-                if (!component.DesignItemId.Contains("FORMULA-256"))
+                if (!(component.DesignItemId.Contains("FORMULA-256")||component.DesignItemId.Contains("FORMULA256") || component.SourceLibraryName.Contains("KONT_TOCH")))
                 {
                     connectionCounters.Add(new ConnectionCounter(component));
 
@@ -101,7 +101,7 @@ namespace AltiumParserWPF.Analysis.F2K
 
                 foreach (var chanel in ActiveChanels)
                 {
-                    if (chanel.ConnectionName == entryPoint.Connection)
+                    if (entryPoint.Connection.Exists(x => x == chanel.ConnectionName))
                     {
                         chanel.ConnectedObjects.Add(DUT.Name + ":" + entryPoint.Name);
                         tempconnections.Single(x => x.Name == entryPoint.Name).Add(chanel);
