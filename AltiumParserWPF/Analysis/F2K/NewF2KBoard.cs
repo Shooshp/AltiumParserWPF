@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AltiumParserWPF.AltiumParser.Records;
 using AltiumParserWPF.Analysis.Ett;
@@ -17,6 +18,7 @@ namespace AltiumParserWPF.Analysis.F2K
             GetActiveChanels();
 
             DUT = DeterminateDut();
+            GetBlackBoxes();
             Connections = new List<ConnectionUnion>();
             Connections = GetConnections();
         }
@@ -114,6 +116,62 @@ namespace AltiumParserWPF.Analysis.F2K
             var sortedconnections = tempconnections.OrderBy(x => x.Name, new AlphanumComparatorFast()).ToList();
 
             return sortedconnections;
+        }
+
+        private void GetBlackBoxes()
+        {
+            foreach (var component in Board.Components)
+            {
+                if (component.PinList.Count == 16)
+                {
+                    var match = true;
+
+                    foreach (var pin in component.PinList)
+                    {
+                        if (Convert.ToInt32(pin.Designator) % 2 == 0 && pin.ConnectedPowerPorts.Count != 0)
+                        {
+                            if (pin.ConnectedPowerPorts.Exists(x=>x.Text.ToUpper().Contains("GND")))
+                            {
+                                match = true;
+                            }
+                            else
+                            {
+                                match = false;
+                            }
+                        }
+                        else
+                        {
+                            match = false;
+                        }
+                    }
+
+                    if(match)
+                    {
+                        match = false;
+                    }
+                }
+            }
+        }
+    }
+
+    public class BlackBox
+    {
+        public Component Component;
+
+        public BlackBox(Component component)
+        {
+            Component = component;
+        }
+
+        private void GetCommutationPairs()
+        {
+            foreach (var pin in Component.PinList)
+            {
+                if (Convert.ToInt32(pin.Designator) % 2 == 1)
+                {
+
+                }
+            }
         }
     }
 
