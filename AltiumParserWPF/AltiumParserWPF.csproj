@@ -136,6 +136,9 @@
     <Compile Include="Analysis\F2K\NewF2KBoard.cs" />
     <Compile Include="Analysis\TextAnalysis.cs" />
     <Compile Include="ApplicationSettings.cs" />
+    <Compile Include="Windows\F2kOutputWindow.xaml.cs">
+      <DependentUpon>F2kOutputWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ChanelConfigurationWindow.xaml.cs">
       <DependentUpon>ChanelConfigurationWindow.xaml</DependentUpon>
     </Compile>
@@ -145,6 +148,10 @@
     <Compile Include="Windows\StartupWindow.xaml.cs">
       <DependentUpon>StartupWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Windows\F2kOutputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ChanelConfigurationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

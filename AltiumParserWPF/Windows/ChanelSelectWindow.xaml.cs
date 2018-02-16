@@ -20,6 +20,8 @@ namespace AltiumParserWPF.Windows
 
         private PCB pcb;
 
+        public string PCBInfo;
+
         private const string NewettSmall = "DIN41612R.РОЗ.УГЛ.48";
         private const string NewettBig = "DIN41612R.РОЗ.УГЛ.96";
 
@@ -73,8 +75,8 @@ namespace AltiumParserWPF.Windows
             {
                 counter += connection.Chanels.Count;
             }
-
-            Report.Text = "Плата " + Path.GetFileName(parser.FilePath)?.Replace(".SchDoc", "") + " || " + counter + " Каналов";
+            PCBInfo = "Плата " + Path.GetFileName(parser.FilePath)?.Replace(".SchDoc", "") + " || " + counter + " Каналов";
+            Report.Text = PCBInfo;
 
             if (pcb.GetType() == typeof(NewEttBoard) || pcb.GetType() == typeof(OldEttBoard))
             {
@@ -341,19 +343,38 @@ namespace AltiumParserWPF.Windows
         {
             if (Connections.Count != 0) 
             {
-                var chanelConfigurationWindow =
-                    new ChanelConfigurationWindow(Connections, this)
+                if (pcb.GetType() == typeof(NewEttBoard) || pcb.GetType() == typeof(OldEttBoard))
+                {
+                    var chanelConfigurationWindow =
+                        new ChanelConfigurationWindow(Connections, this)
+                        {
+                            WindowStartupLocation = WindowStartupLocation.Manual,
+                            Left = Left,
+                            Top = Top,
+                            Width = ActualWidth,
+                            Height = ActualHeight
+                        };
+                    chanelConfigurationWindow.Show();
+                    Hide();
+                }
+                else
+                {
+                    if (pcb.GetType() == typeof(NewF2KBoard))
                     {
-                        WindowStartupLocation = WindowStartupLocation.Manual,
-                        Left = Left,
-                        Top = Top,
-                        Width = ActualWidth,
-                        Height = ActualHeight
-                    };
-                chanelConfigurationWindow.Show();
-                Hide();
-            }
-            
+                        var outputWindow = new F2KOutputWindow(Connections, this, PCBInfo)
+                        {
+                            WindowStartupLocation = WindowStartupLocation.Manual,
+                            Left = Left,
+                            Top = Top,
+                            Width = ActualWidth,
+                            Height = ActualHeight
+                        };
+
+                        outputWindow.Show();
+                        Hide();
+                    }
+                }
+            } 
         }
 
         protected override void OnClosing(CancelEventArgs e)
