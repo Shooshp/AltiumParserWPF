@@ -15,7 +15,7 @@ namespace AltiumParserWPF.Analysis.F2K
         {
             Board = parser;
             ActiveChanels = new List<Chanel>();
-            FreeChanels = new List<Chanel>();
+            FreeChanels = new List<ConnectionUnion>();
             BlackBoxes = new List<BlackBox>();
             GetActiveChanels();
 
@@ -111,6 +111,40 @@ namespace AltiumParserWPF.Analysis.F2K
                         tempconnections.Single(x => x.Name == entryPoint.Name).Add(chanel);
                     }
                 }
+
+                foreach (var component in Board.Components)
+                {
+                    if (component.PinList.Count == 3 || component.PinList.Count == 2)
+                    {
+                        if (component.PinList.Exists(z=>z.ConnectionsList.Exists(x => entryPoint.Connection.Exists(y => y == x))))
+                        {
+                            foreach (var chanel in ActiveChanels)
+                            {
+                                if (component.PinList.Exists(z=>z.ConnectionsList.Exists(x => chanel.ConnectionName == x)))
+                                {
+                                    if (component.PinList.Count == 2)
+                                    {
+                                        chanel.ConnectedObjects.Add(DUT.Name + ":" + entryPoint.Name + " via 1to1 " + component.Designator.Text);
+                                        tempconnections.Single(x => x.Name == entryPoint.Name).Add(chanel);
+                                    }
+                                    else
+                                    {
+                                        var firstPin = component.PinList.Single(z =>
+                                            z.ConnectionsList.Exists(x => entryPoint.Connection.Exists(y => y == x)));
+                                        var secndPin = component.PinList.Single(z =>
+                                            z.ConnectionsList.Exists(x => chanel.ConnectionName == x));
+
+                                        if (Math.Abs(Convert.ToInt32(firstPin.Designator) - Convert.ToInt32(secndPin.Designator)) == 1)
+                                        {
+                                            chanel.ConnectedObjects.Add(DUT.Name + ":" + entryPoint.Name + " via 2to1 " + component.Designator.Text);
+                                            tempconnections.Single(x => x.Name == entryPoint.Name).Add(chanel);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             tempconnections.RemoveAll(x => x.Chanels.Count == 0);
@@ -135,7 +169,7 @@ namespace AltiumParserWPF.Analysis.F2K
                                 if (entryPoint.Connection.Exists(x => commutationPair.Contains(x)))
                                 {
                                     tempconnections.Add(new ConnectionUnion(entryPoint.Name));
-                                    chanel.ConnectedObjects.Add(DUT.Name + ":" + entryPoint.Name + "via BlackBox " + blackBox.Component.Designator.Text);
+                                    chanel.ConnectedObjects.Add(DUT.Name + ":" + entryPoint.Name + " via BlackBox " + blackBox.Component.Designator.Text);
                                     tempconnections.Single(x => x.Name == entryPoint.Name).Add(chanel);
                                 }
                             }
@@ -145,6 +179,8 @@ namespace AltiumParserWPF.Analysis.F2K
             }
 
             var sortedconnections = tempconnections.OrderBy(x => x.Name, new AlphanumComparatorFast()).ToList();
+
+
 
             return sortedconnections;
         }
@@ -220,6 +256,7 @@ namespace AltiumParserWPF.Analysis.F2K
             CommutationPairs = new string[4,2];
 
             var tepmpinlist = Component.PinList.OrderBy(x => Convert.ToInt32(x.Designator)).ToList();
+
             for (var i = 1; i < 14; i+=4)
             {
                 var firstPin = tepmpinlist.Single(x => Convert.ToInt32(x.Designator) == i);

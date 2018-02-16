@@ -9,7 +9,7 @@ namespace AltiumParserWPF.Analysis.Ett
         {
             Board = parser;
             DutCount = GetDutNumber();
-            FreeChanels = new List<Chanel>();
+            FreeChanels = new List<ConnectionUnion>();
             ActiveChanels = new List<Chanel>();
             GetActiveChanels();
 
@@ -57,7 +57,7 @@ namespace AltiumParserWPF.Analysis.Ett
             {
                 if (!ActiveChanels.Exists(x => x.ChanelName == avaliblechanel.Socket))
                 {
-                    FreeChanels.Add(new Chanel(avaliblechanel.Socket, "free"));
+                    FreeChanels.Add(new ConnectionUnion(avaliblechanel.Socket));
                 }
             }
         }

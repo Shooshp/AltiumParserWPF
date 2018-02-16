@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using FirstFloor.ModernUI.Windows.Controls;
@@ -25,6 +26,11 @@ namespace AltiumParserWPF.Windows.Popups
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace AltiumParserWPF.Analysis
     {
         public static AltiumParser.AltiumParser Board;
         public List<Chanel> ActiveChanels;
-        public List<Chanel> FreeChanels;
+        public List<ConnectionUnion> FreeChanels;
         public List<ConnectionUnion> Connections;
 
         public static string RemoveSpecialCharacters(string str)
