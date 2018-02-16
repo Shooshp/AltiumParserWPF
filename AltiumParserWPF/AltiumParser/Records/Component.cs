@@ -79,6 +79,7 @@ namespace AltiumParserWPF.AltiumParser.Records
                 pin.CheckNets(parser);
                 pin.CheckPorts(parser);
                 pin.CheckPowerPorts(parser); 
+                pin.GetConnections();
             }
         }
     }

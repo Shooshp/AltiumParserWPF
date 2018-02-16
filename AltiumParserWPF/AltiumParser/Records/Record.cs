@@ -16,6 +16,7 @@ namespace AltiumParserWPF.AltiumParser.Records
         public List<Net> ConnectedNets;
         public List<Port> ConnectedPorts;
         public List<PowerPort> ConnectedPowerPorts;
+        public List<string> ConnectionsList;
 
         protected void AllocateValues(object child)
         {
@@ -247,6 +248,27 @@ namespace AltiumParserWPF.AltiumParser.Records
                             }
                         }
                     }
+                }
+            }
+        }
+
+        public void GetConnections()
+        {
+            ConnectionsList = new List<string>();
+
+            if (ConnectedNets.Count != 0)
+            {
+                foreach (var net in ConnectedNets)
+                {
+                    ConnectionsList.Add(net.Text.ToUpper());
+                }
+            }
+
+            if (ConnectedPorts.Count != 0)
+            {
+                foreach (var port in ConnectedPorts)
+                {
+                    ConnectionsList.Add(port.Name.ToUpper());
                 }
             }
         }

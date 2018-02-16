@@ -103,6 +103,7 @@ namespace AltiumParserWPF.AltiumParser.Records
                 sheetEntry.CheckNets(parser);
                 sheetEntry.CheckPorts(parser);
                 sheetEntry.CheckPowerPorts(parser);
+                sheetEntry.GetConnections();
             }
         }
     }
